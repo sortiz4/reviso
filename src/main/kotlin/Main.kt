@@ -1,15 +1,14 @@
-package rename
-
 import java.io.IOException as IoException
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.stage.Stage
+import rename.Resource
 
 class Main : Application() {
     @Throws(IoException::class)
     override fun start(primaryStage: Stage) {
         // Load the scene and set some basic properties
-        val root = Resource.fxml("Main")
+        val root = Resource.fxml("rename/Main")
         primaryStage.scene = Scene(root)
         primaryStage.title = "Renamer"
         primaryStage.show()

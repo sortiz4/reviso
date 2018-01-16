@@ -12,6 +12,6 @@ object Resource {
     }
 
     private fun load(path: String): Url {
-        return Resource::class.java.getResource(path)
+        return Resource::class.java.classLoader.getResource(path)
     }
 }
