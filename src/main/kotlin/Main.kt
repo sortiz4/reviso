@@ -10,7 +10,7 @@ class Main : Application() {
         // Load the scene and set some basic properties
         val root = Resource.fxml("rename/scene/Main")
         stage.scene = Scene(root)
-        stage.title = "Renamer"
+        stage.title = "Renamer+"
         stage.show()
 
         // Set the window constraints

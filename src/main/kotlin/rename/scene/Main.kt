@@ -2,6 +2,7 @@ package rename.scene
 
 import java.io.File
 import java.net.URL as Url
+import java.util.regex.Pattern
 import java.util.ResourceBundle
 import javafx.fxml.FXML as Fxml
 import javafx.fxml.Initializable
@@ -12,8 +13,8 @@ import javafx.scene.control.TextField
 import kotlin.collections.ArrayList
 import rename.Constants
 import rename.Message
+import rename.Preview
 import rename.Rename
-import rename.Standard
 
 class Main : Initializable {
     // Path properties
@@ -57,28 +58,37 @@ class Main : Initializable {
 
     @Fxml
     fun previewSearch() {
-        // search.text
-        // replace.text
-        // regexSearch.isSelected
-        // recursiveSearch.isSelected
-        val pairs = ArrayList<Pair<File, File>>()
-        for(node in this.getFileTree(this.recursiveSearch.isSelected)) {
-            // Preview based on search
-            pairs.add(Pair(node, node))
-        }
-        if(pairs.size > 0) {
-            Preview(pairs).showAndWait()
+        if(!this.search.text.isEmpty()) {
+            val pairs = ArrayList<Pair<File, File>>()
+            val pattern = when(this.regexSearch.isSelected) {
+                true -> Pattern.compile(this.search.text)
+                false -> null
+            }
+            for(node in this.getFileTree(this.recursiveSearch.isSelected)) {
+                when(this.regexSearch.isSelected) {
+                    true -> pairs.add(Pair(node, Preview.regex(node, pattern!!, this.replace.text)))
+                    false -> pairs.add(Pair(node, Preview.simple(node, this.search.text, this.replace.text)))
+                }
+            }
+            if(pairs.size > 0) {
+                PreviewAlert(pairs).showAndWait()
+            }
         }
     }
 
     @Fxml
     fun executeSearch() {
-        // search.text
-        // replace.text
-        // regexSearch.isSelected
-        // recursiveSearch.isSelected
-        for(node in this.getFileTree(this.recursiveSearch.isSelected)) {
-            // Rename based on search
+        if(!this.search.text.isEmpty()) {
+            val pattern = when(this.regexSearch.isSelected) {
+                true -> Pattern.compile(this.search.text)
+                false -> null
+            }
+            for(node in this.getFileTree(this.recursiveSearch.isSelected)) {
+                when(this.regexSearch.isSelected) {
+                    true -> Rename.regex(node, pattern!!, this.replace.text)
+                    false -> Rename.simple(node, this.search.text, this.replace.text)
+                }
+            }
         }
     }
 
@@ -88,13 +98,15 @@ class Main : Initializable {
         for(node in this.getFileTree(this.recursiveStandard.isSelected)) {
             // TODO: Optimize mode comparison
             when(this.choices.selectionModel.selectedItem) {
-                Constants.CHOICE_LOWER -> pairs.add(Pair(node, Standard.lower(node)))
-                Constants.CHOICE_UPPER -> pairs.add(Pair(node, Standard.upper(node)))
+                Constants.CHOICE_LOWER -> pairs.add(Pair(node, Preview.lower(node)))
+                Constants.CHOICE_UPPER -> pairs.add(Pair(node, Preview.upper(node)))
+                Constants.CHOICE_SENTENCE -> pairs.add(Pair(node, Preview.sentence(node)))
+                Constants.CHOICE_TITLE_SIMPLE -> pairs.add(Pair(node, Preview.titleSimple(node)))
                 else -> throw RuntimeException()
             }
         }
         if(pairs.size > 0) {
-            Preview(pairs).showAndWait()
+            PreviewAlert(pairs).showAndWait()
         }
     }
 
@@ -105,6 +117,8 @@ class Main : Initializable {
             when(this.choices.selectionModel.selectedItem) {
                 Constants.CHOICE_LOWER -> Rename.lower(node)
                 Constants.CHOICE_UPPER -> Rename.upper(node)
+                Constants.CHOICE_SENTENCE -> Rename.sentence(node)
+                Constants.CHOICE_TITLE_SIMPLE -> Rename.titleSimple(node)
                 else -> throw RuntimeException()
             }
         }
