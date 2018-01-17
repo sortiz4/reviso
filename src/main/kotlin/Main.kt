@@ -6,17 +6,17 @@ import rename.Resource
 
 class Main : Application() {
     @Throws(IoException::class)
-    override fun start(primaryStage: Stage) {
+    override fun start(stage: Stage) {
         // Load the scene and set some basic properties
-        val root = Resource.fxml("rename/Main")
-        primaryStage.scene = Scene(root)
-        primaryStage.title = "Renamer"
-        primaryStage.show()
+        val root = Resource.fxml("rename/scene/Main")
+        stage.scene = Scene(root)
+        stage.title = "Renamer"
+        stage.show()
 
         // Set the window constraints
-        primaryStage.minWidth = primaryStage.width
-        primaryStage.minHeight = primaryStage.height
-        primaryStage.maxHeight = primaryStage.height
+        stage.minWidth = stage.width
+        stage.minHeight = stage.height
+        stage.maxHeight = stage.height
     }
 
     companion object {
