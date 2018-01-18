@@ -21,7 +21,7 @@ import kotlin.collections.ArrayList
 import rename.Rename
 import rename.Transform
 
-class Main : Initializable {
+class Root : Initializable {
     // JavaFx path properties
     @Fxml
     private lateinit var fxPath: TextField

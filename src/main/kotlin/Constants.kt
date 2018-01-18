@@ -4,7 +4,7 @@ object Constants {
 
     // Assets and resources
     val ICON = "rename/scene/icon"
-    val SCENE = "rename/scene/Main"
+    val ROOT = "rename/scene/Root"
 
     // Standard transformations
     val CHOICE_UPPER = "Uppercase"
@@ -12,7 +12,7 @@ object Constants {
     val CHOICE_SENTENCE = "Sentence"
     val CHOICE_TITLE_AP = "Title (AP)"
     val CHOICE_TITLE_SIMPLE = "Title (simple)"
-    val CHOICES: Array<String> = arrayOf(
+    val CHOICES = arrayOf(
             CHOICE_LOWER,
             CHOICE_UPPER,
             CHOICE_SENTENCE,
