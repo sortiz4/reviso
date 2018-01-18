@@ -8,9 +8,12 @@ import javafx.scene.control.TextArea
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.text.Font
+import javafx.stage.Stage
 
 open class Alert : BaseAlert {
     constructor(type: AlertType) : super(type) {
+        val stage = this.dialogPane.scene.window as Stage
+        stage.icons.add(Resource.png(Constants.ICON))
         this.buttonTypes[0] = ButtonType("Ok")
     }
 }

@@ -7,7 +7,8 @@ class Main : Application() {
     @Throws(IoException::class)
     override fun start(stage: Stage) {
         // Load the scene and set the title
-        stage.scene = Scene(Resource.fxml("rename/scene/Main"))
+        stage.icons.add(Resource.png(Constants.ICON))
+        stage.scene = Scene(Resource.fxml(Constants.SCENE))
         stage.title = Constants.TITLE
         stage.show()
 

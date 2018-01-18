@@ -1,6 +1,10 @@
 object Constants {
-    // Program and dialog text
-    val TITLE = "Renamer+"
+    // Text and dialog
+    val TITLE = "Rename"
+
+    // Assets and resources
+    val ICON = "rename/scene/icon"
+    val SCENE = "rename/scene/Main"
 
     // Standard transformations
     val CHOICE_UPPER = "Uppercase"
