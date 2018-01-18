@@ -19,33 +19,33 @@
     <TitledPane collapsible="false" text="Path">
         <VBox spacing="5.0">
             <HBox spacing="5.0">
-                <TextField fx:id="path" onKeyReleased="#openKey"
+                <TextField fx:id="fxPath" onKeyReleased="#onKeyRelease"
                            promptText="Path to directory..." HBox.hgrow="ALWAYS"/>
-                <Button onAction="#browse" text="Browse"/>
-                <Button onAction="#open" text="Open"/>
+                <Button onAction="#onBrowse" text="Browse"/>
+                <Button onAction="#onOpen" text="Open"/>
             </HBox>
-            <Label fx:id="status" text="Nothing is open..."/>
+            <Label fx:id="fxStatus" text="Nothing is open..."/>
         </VBox>
     </TitledPane>
     <TitledPane collapsible="false" text="Pattern">
         <VBox spacing="5.0">
-            <TextField fx:id="search" promptText="Search for..."/>
-            <TextField fx:id="replace" promptText="Replace with..."/>
+            <TextField fx:id="fxSearch" promptText="Search for..."/>
+            <TextField fx:id="fxReplace" promptText="Replace with..."/>
             <HBox alignment="CENTER_RIGHT" spacing="5.0">
-                <CheckBox fx:id="regexSearch" text="Regex"/>
-                <CheckBox fx:id="recursiveSearch" text="Recursive"/>
-                <Button onAction="#previewSearch" text="Preview"/>
-                <Button onAction="#executeSearch" text="Rename"/>
+                <CheckBox fx:id="fxRegexSearch" text="Regex"/>
+                <CheckBox fx:id="fxRecursiveSearch" text="Recursive"/>
+                <Button onAction="#onPreviewSearch" text="Preview"/>
+                <Button onAction="#onExecuteSearch" text="Rename"/>
             </HBox>
         </VBox>
     </TitledPane>
     <TitledPane collapsible="false" text="Standard">
         <VBox spacing="5.0">
-            <ComboBox fx:id="choices" maxWidth="Infinity"/>
+            <ComboBox fx:id="fxChoices" maxWidth="Infinity"/>
             <HBox alignment="CENTER_RIGHT" spacing="5.0">
-                <CheckBox fx:id="recursiveStandard" text="Recursive"/>
-                <Button onAction="#previewStandard" text="Preview"/>
-                <Button onAction="#executeStandard" text="Rename"/>
+                <CheckBox fx:id="fxRecursiveStandard" text="Recursive"/>
+                <Button onAction="#onPreviewStandard" text="Preview"/>
+                <Button onAction="#onExecuteStandard" text="Rename"/>
             </HBox>
         </VBox>
     </TitledPane>

@@ -5,26 +5,26 @@ import java.util.regex.Pattern
 
 object Rename {
     fun regex(file: File, search: Pattern, replace: String) {
-        file.renameTo(Preview.regex(file, search, replace))
+        file.renameTo(Transform.regex(file, search, replace))
     }
 
     fun simple(file: File, search: String, replace: String) {
-        file.renameTo(Preview.simple(file, search, replace))
+        file.renameTo(Transform.simple(file, search, replace))
     }
 
     fun lower(file: File) {
-        file.renameTo(Preview.lower(file))
+        file.renameTo(Transform.lower(file))
     }
 
     fun upper(file: File) {
-        file.renameTo(Preview.upper(file))
+        file.renameTo(Transform.upper(file))
     }
 
     fun sentence(file: File) {
-        file.renameTo(Preview.sentence(file))
+        file.renameTo(Transform.sentence(file))
     }
 
     fun titleSimple(file: File) {
-        file.renameTo(Preview.titleSimple(file))
+        file.renameTo(Transform.titleSimple(file))
     }
 }

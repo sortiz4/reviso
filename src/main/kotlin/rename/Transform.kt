@@ -3,7 +3,7 @@ package rename
 import java.io.File
 import java.util.regex.Pattern
 
-object Preview {
+object Transform {
     /**
      * Replaces all matches in the file name (regex).
      */
@@ -21,7 +21,7 @@ object Preview {
     }
 
     /**
-     * Decapitalizes every letter in the file name.
+     * Uncapitalizes every letter in the file name.
      */
     fun lower(file: File): File {
         val name = file.name.toLowerCase()

@@ -1,4 +1,6 @@
+*.ico
 *.iml
+*.png
 /.gradle
 /.idea
 /build

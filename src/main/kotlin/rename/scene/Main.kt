@@ -18,58 +18,59 @@ import javafx.scene.input.KeyEvent
 import javafx.scene.input.TransferMode
 import javafx.stage.DirectoryChooser
 import kotlin.collections.ArrayList
-import rename.Constants
-import rename.Message
-import rename.Preview
 import rename.Rename
+import rename.Transform
 
 class Main : Initializable {
-    // Path properties
+    // JavaFx path properties
     @Fxml
-    private lateinit var path: TextField
+    private lateinit var fxPath: TextField
     @Fxml
-    private lateinit var status: Label
+    private lateinit var fxStatus: Label
 
-    // Pattern properties
+    // JavaFx pattern properties
     @Fxml
-    private lateinit var search: TextField
+    private lateinit var fxSearch: TextField
     @Fxml
-    private lateinit var replace: TextField
+    private lateinit var fxReplace: TextField
     @Fxml
-    private lateinit var regexSearch: CheckBox
+    private lateinit var fxRegexSearch: CheckBox
     @Fxml
-    private lateinit var recursiveSearch: CheckBox
+    private lateinit var fxRecursiveSearch: CheckBox
 
-    // Standard properties
+    // JavaFx standard properties
     @Fxml
-    private lateinit var choices: ComboBox<String>
+    private lateinit var fxChoices: ComboBox<String>
     @Fxml
-    private lateinit var recursiveStandard: CheckBox
+    private lateinit var fxRecursiveStandard: CheckBox
 
     // Regular properties
-    private var lastPath: String? = null
+    private var directory: String? = null
 
     @Fxml
-    fun browse(event: ActionEvent) {
+    fun onBrowse(event: ActionEvent) {
         val window = DirectoryChooser()
-        if(this.lastPath != null) {
-            window.initialDirectory = File(this.lastPath)
+        if(this.directory != null) {
+            window.initialDirectory = File(this.directory)
         }
         val result = window.showDialog((event.target as Node).scene.window)
         if(result != null) {
-            this.path.text = result.path
+            this.fxPath.text = result.path
         }
     }
 
     @Fxml
-    fun open() {
-        val path = this.path.text.trim()
+    fun onOpen() {
+        // Trim the input and ignore empty requests
+        val path = this.fxPath.text.trim()
         if(!path.isEmpty()) {
             val file = File(path)
             if(file.isDirectory) {
-                this.lastPath = this.path.text
-                this.status.text = Message.open(this.path.text)
+                // Set the directory and status when the path is a directory
+                this.directory = this.fxPath.text
+                this.fxStatus.text = Constants.open(this.fxPath.text)
             } else {
+                // Alert the user when the path is not a directory
                 InvalidPathAlert(file.path).showAndWait()
             }
         }
@@ -85,40 +86,44 @@ class Main : Initializable {
     @Fxml
     fun onDragDrop(event: DragEvent) {
         var set = false
-        val board = event.dragboard
-        if(board.hasFiles()) {
-            for(file in board.files) {
+        val selection = event.dragboard
+        if(selection.hasFiles()) {
+            for(file in selection.files) {
                 if(file.isDirectory) {
-                    this.path.text = file.path
+                    // Set the path to the first directory
+                    this.fxPath.text = file.path
                     set = true
                     break
                 }
             }
-            if(!set && board.files.size > 0) {
-                this.path.text = board.files[0].parent
+            if(!set && selection.files.size > 0) {
+                // Infer the path from the first file
+                this.fxPath.text = selection.files[0].parent
             }
         }
     }
 
     @Fxml
-    fun openKey(event: KeyEvent) {
+    fun onKeyRelease(event: KeyEvent) {
         if(event.code == KeyCode.ENTER){
-            this.open()
+            this.onOpen()
         }
     }
 
     @Fxml
-    fun previewSearch() {
-        if(!this.search.text.isEmpty()) {
+    fun onPreviewSearch() {
+        if(!this.fxSearch.text.isEmpty()) {
             val pairs = ArrayList<Pair<File, File>>()
-            val pattern = when(this.regexSearch.isSelected) {
-                true -> Pattern.compile(this.search.text)
+            val search = this.fxSearch.text
+            val replace = this.fxReplace.text
+            val pattern = when(this.fxRegexSearch.isSelected) {
+                true -> Pattern.compile(search)
                 false -> null
             }
-            for(node in this.getFileTree(this.recursiveSearch.isSelected)) {
-                when(this.regexSearch.isSelected) {
-                    true -> pairs.add(Pair(node, Preview.regex(node, pattern!!, this.replace.text)))
-                    false -> pairs.add(Pair(node, Preview.simple(node, this.search.text, this.replace.text)))
+            for(node in this.fileTree(this.fxRecursiveSearch.isSelected)) {
+                when(this.fxRegexSearch.isSelected) {
+                    true -> pairs.add(Pair(node, Transform.regex(node, pattern!!, replace)))
+                    false -> pairs.add(Pair(node, Transform.simple(node, search, replace)))
                 }
             }
             if(pairs.size > 0) {
@@ -128,31 +133,33 @@ class Main : Initializable {
     }
 
     @Fxml
-    fun executeSearch() {
-        if(!this.search.text.isEmpty()) {
-            val pattern = when(this.regexSearch.isSelected) {
-                true -> Pattern.compile(this.search.text)
+    fun onExecuteSearch() {
+        if(!this.fxSearch.text.isEmpty()) {
+            val search = this.fxSearch.text
+            val replace = this.fxReplace.text
+            val pattern = when(this.fxRegexSearch.isSelected) {
+                true -> Pattern.compile(search)
                 false -> null
             }
-            for(node in this.getFileTree(this.recursiveSearch.isSelected)) {
-                when(this.regexSearch.isSelected) {
-                    true -> Rename.regex(node, pattern!!, this.replace.text)
-                    false -> Rename.simple(node, this.search.text, this.replace.text)
+            for(node in this.fileTree(this.fxRecursiveSearch.isSelected)) {
+                when(this.fxRegexSearch.isSelected) {
+                    true -> Rename.regex(node, pattern!!, replace)
+                    false -> Rename.simple(node, search, replace)
                 }
             }
         }
     }
 
     @Fxml
-    fun previewStandard() {
+    fun onPreviewStandard() {
         val pairs = ArrayList<Pair<File, File>>()
-        for(node in this.getFileTree(this.recursiveStandard.isSelected)) {
-            when(this.choices.selectionModel.selectedItem) {
-                Constants.CHOICE_LOWER -> pairs.add(Pair(node, Preview.lower(node)))
-                Constants.CHOICE_UPPER -> pairs.add(Pair(node, Preview.upper(node)))
-                Constants.CHOICE_SENTENCE -> pairs.add(Pair(node, Preview.sentence(node)))
-                Constants.CHOICE_TITLE_SIMPLE -> pairs.add(Pair(node, Preview.titleSimple(node)))
-                else -> throw RuntimeException()
+        for(node in this.fileTree(this.fxRecursiveStandard.isSelected)) {
+            when(this.fxChoices.selectionModel.selectedItem) {
+                Constants.CHOICE_LOWER -> pairs.add(Pair(node, Transform.lower(node)))
+                Constants.CHOICE_UPPER -> pairs.add(Pair(node, Transform.upper(node)))
+                Constants.CHOICE_SENTENCE -> pairs.add(Pair(node, Transform.sentence(node)))
+                Constants.CHOICE_TITLE_SIMPLE -> pairs.add(Pair(node, Transform.titleSimple(node)))
+                else -> throw RuntimeException() // Unreachable
             }
         }
         if(pairs.size > 0) {
@@ -161,34 +168,36 @@ class Main : Initializable {
     }
 
     @Fxml
-    fun executeStandard() {
-        for(node in this.getFileTree(this.recursiveStandard.isSelected)) {
-            when(this.choices.selectionModel.selectedItem) {
+    fun onExecuteStandard() {
+        for(node in this.fileTree(this.fxRecursiveStandard.isSelected)) {
+            when(this.fxChoices.selectionModel.selectedItem) {
                 Constants.CHOICE_LOWER -> Rename.lower(node)
                 Constants.CHOICE_UPPER -> Rename.upper(node)
                 Constants.CHOICE_SENTENCE -> Rename.sentence(node)
                 Constants.CHOICE_TITLE_SIMPLE -> Rename.titleSimple(node)
-                else -> throw RuntimeException()
+                else -> throw RuntimeException() // Unreachable
             }
         }
     }
 
-    private fun getFileTree(recursive: Boolean): Sequence<File> {
-        if(this.lastPath != null) {
-            val file = File(this.lastPath)
+    override fun initialize(resource: Url?, bundle: ResourceBundle?) {
+        this.fxChoices.items.addAll(*Constants.CHOICES)
+        this.fxChoices.selectionModel.selectFirst()
+    }
+
+    private fun fileTree(recursive: Boolean): Sequence<File> {
+        if(this.directory != null) {
+            // Collect the file tree as a sequence
+            val file = File(this.directory)
             val tree = when(recursive) {
                 true -> file.walk()
                 false -> file.walk().maxDepth(1)
             }
             return tree.filter { node -> node.isFile }
         } else {
+            // Alert the user when no directory is found
             EmptyPathAlert().showAndWait()
         }
         return emptySequence()
-    }
-
-    override fun initialize(resource: Url?, bundle: ResourceBundle?) {
-        this.choices.items.addAll(*Constants.CHOICES)
-        this.choices.selectionModel.selectFirst()
     }
 }

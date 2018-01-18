@@ -2,15 +2,13 @@ import java.io.IOException as IoException
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.stage.Stage
-import rename.Resource
 
 class Main : Application() {
     @Throws(IoException::class)
     override fun start(stage: Stage) {
-        // Load the scene and set some basic properties
-        val root = Resource.fxml("rename/scene/Main")
-        stage.scene = Scene(root)
-        stage.title = "Renamer+"
+        // Load the scene and set the title
+        stage.scene = Scene(Resource.fxml("rename/scene/Main"))
+        stage.title = Constants.TITLE
         stage.show()
 
         // Set the window constraints
