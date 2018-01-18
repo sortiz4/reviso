@@ -10,11 +10,13 @@ object Constants {
     val CHOICE_UPPER = "Uppercase"
     val CHOICE_LOWER = "Lowercase"
     val CHOICE_SENTENCE = "Sentence"
+    val CHOICE_TITLE_AP = "Title (AP)"
     val CHOICE_TITLE_SIMPLE = "Title (simple)"
     val CHOICES: Array<String> = arrayOf(
-            CHOICE_UPPER,
             CHOICE_LOWER,
+            CHOICE_UPPER,
             CHOICE_SENTENCE,
+            CHOICE_TITLE_AP,
             CHOICE_TITLE_SIMPLE
     )
 

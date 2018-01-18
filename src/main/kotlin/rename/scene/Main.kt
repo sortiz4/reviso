@@ -158,6 +158,7 @@ class Main : Initializable {
                 Constants.CHOICE_LOWER -> pairs.add(Pair(node, Transform.lower(node)))
                 Constants.CHOICE_UPPER -> pairs.add(Pair(node, Transform.upper(node)))
                 Constants.CHOICE_SENTENCE -> pairs.add(Pair(node, Transform.sentence(node)))
+                Constants.CHOICE_TITLE_AP -> pairs.add(Pair(node, Transform.titleAp(node)))
                 Constants.CHOICE_TITLE_SIMPLE -> pairs.add(Pair(node, Transform.titleSimple(node)))
                 else -> throw RuntimeException() // Unreachable
             }
@@ -174,6 +175,7 @@ class Main : Initializable {
                 Constants.CHOICE_LOWER -> Rename.lower(node)
                 Constants.CHOICE_UPPER -> Rename.upper(node)
                 Constants.CHOICE_SENTENCE -> Rename.sentence(node)
+                Constants.CHOICE_TITLE_AP -> Rename.titleAp(node)
                 Constants.CHOICE_TITLE_SIMPLE -> Rename.titleSimple(node)
                 else -> throw RuntimeException() // Unreachable
             }

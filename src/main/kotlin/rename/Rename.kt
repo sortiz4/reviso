@@ -24,6 +24,10 @@ object Rename {
         file.renameTo(Transform.sentence(file))
     }
 
+    fun titleAp(file: File) {
+        file.renameTo(Transform.titleAp(file))
+    }
+
     fun titleSimple(file: File) {
         file.renameTo(Transform.titleSimple(file))
     }

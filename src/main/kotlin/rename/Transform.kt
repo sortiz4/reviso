@@ -2,8 +2,16 @@ package rename
 
 import java.io.File
 import java.util.regex.Pattern
+import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 
 object Transform {
+    // Special words in AP titles
+    private val AP_WORDS = HashSet(arrayListOf(
+            "a", "an", "and", "at", "but", "by", "for", "in", "nor",
+            "of", "on", "or", "so", "the", "to", "up", "yet"
+    ))
+
     /**
      * Replaces all matches in the file name (regex).
      */
@@ -45,7 +53,26 @@ object Transform {
     }
 
     /**
-     * Capitalizes the first letter of every word in the file name.
+     * Capitalizes the first letter of every word in the file name (AP).
+     */
+    fun titleAp(file: File): File {
+        val words = file.name.split(' ') as ArrayList
+        for(i in 0 until words.size) {
+            words[i] = words[i].toLowerCase()
+            if(i == 0 || i == words.size - 1) {
+                words[i] = words[i].capitalize()
+            } else {
+                if(words[i] !in Transform.AP_WORDS) {
+                    words[i] = words[i].capitalize()
+                }
+            }
+        }
+        val name = words.joinToString(" ")
+        return File(file.parent, name)
+    }
+
+    /**
+     * Capitalizes the first letter of every word in the file name (simple).
      */
     fun titleSimple(file: File): File {
         val name = file.name.split(' ').joinToString(" ") { s -> s.toLowerCase().capitalize() }
