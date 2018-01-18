@@ -10,7 +10,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.121"
+<VBox onDragDropped="#onDragDrop" onDragOver="#onDragOver"
+      prefWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.121"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="rename.scene.Main">
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
@@ -18,7 +19,9 @@
     <TitledPane collapsible="false" text="Path">
         <VBox spacing="5.0">
             <HBox spacing="5.0">
-                <TextField fx:id="path" promptText="Path to directory..." HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="path" onKeyReleased="#openKey"
+                           promptText="Path to directory..." HBox.hgrow="ALWAYS"/>
+                <Button onAction="#browse" text="Browse"/>
                 <Button onAction="#open" text="Open"/>
             </HBox>
             <Label fx:id="status" text="Nothing is open..."/>

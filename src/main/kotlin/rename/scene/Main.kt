@@ -2,14 +2,21 @@ package rename.scene
 
 import java.io.File
 import java.net.URL as Url
-import java.util.regex.Pattern
 import java.util.ResourceBundle
+import java.util.regex.Pattern
+import javafx.event.ActionEvent
 import javafx.fxml.FXML as Fxml
 import javafx.fxml.Initializable
+import javafx.scene.Node
 import javafx.scene.control.CheckBox
 import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
+import javafx.scene.input.DragEvent
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
+import javafx.scene.input.TransferMode
+import javafx.stage.DirectoryChooser
 import kotlin.collections.ArrayList
 import rename.Constants
 import rename.Message
@@ -43,6 +50,18 @@ class Main : Initializable {
     private var lastPath: String? = null
 
     @Fxml
+    fun browse(event: ActionEvent) {
+        val window = DirectoryChooser()
+        if(this.lastPath != null) {
+            window.initialDirectory = File(this.lastPath)
+        }
+        val result = window.showDialog((event.target as Node).scene.window)
+        if(result != null) {
+            this.path.text = result.path
+        }
+    }
+
+    @Fxml
     fun open() {
         val path = this.path.text.trim()
         if(!path.isEmpty()) {
@@ -53,6 +72,38 @@ class Main : Initializable {
             } else {
                 InvalidPathAlert(file.path).showAndWait()
             }
+        }
+    }
+
+    @Fxml
+    fun onDragOver(event: DragEvent) {
+        if(event.dragboard.hasFiles()) {
+            event.acceptTransferModes(TransferMode.COPY)
+        }
+    }
+
+    @Fxml
+    fun onDragDrop(event: DragEvent) {
+        var set = false
+        val board = event.dragboard
+        if(board.hasFiles()) {
+            for(file in board.files) {
+                if(file.isDirectory) {
+                    this.path.text = file.path
+                    set = true
+                    break
+                }
+            }
+            if(!set && board.files.size > 0) {
+                this.path.text = board.files[0].parent
+            }
+        }
+    }
+
+    @Fxml
+    fun openKey(event: KeyEvent) {
+        if(event.code == KeyCode.ENTER){
+            this.open()
         }
     }
 
@@ -96,7 +147,6 @@ class Main : Initializable {
     fun previewStandard() {
         val pairs = ArrayList<Pair<File, File>>()
         for(node in this.getFileTree(this.recursiveStandard.isSelected)) {
-            // TODO: Optimize mode comparison
             when(this.choices.selectionModel.selectedItem) {
                 Constants.CHOICE_LOWER -> pairs.add(Pair(node, Preview.lower(node)))
                 Constants.CHOICE_UPPER -> pairs.add(Pair(node, Preview.upper(node)))
@@ -113,7 +163,6 @@ class Main : Initializable {
     @Fxml
     fun executeStandard() {
         for(node in this.getFileTree(this.recursiveStandard.isSelected)) {
-            // TODO: Optimize mode comparison
             when(this.choices.selectionModel.selectedItem) {
                 Constants.CHOICE_LOWER -> Rename.lower(node)
                 Constants.CHOICE_UPPER -> Rename.upper(node)
