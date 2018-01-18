@@ -1,4 +1,4 @@
-package rename
+package reviso
 
 import java.io.File
 import java.util.regex.Pattern
@@ -6,7 +6,9 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
 object Transform {
-    // Special words in AP titles
+    /**
+     * Words in AP titles that should be uncapitalized.
+     */
     private val AP_WORDS = HashSet(arrayListOf(
             "a", "an", "and", "at", "but", "by", "for", "in", "nor",
             "of", "on", "or", "so", "the", "to", "up", "yet"

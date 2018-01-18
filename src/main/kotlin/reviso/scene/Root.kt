@@ -1,4 +1,4 @@
-package rename.scene
+package reviso.scene
 
 import java.io.File
 import java.net.URL as Url
@@ -18,8 +18,9 @@ import javafx.scene.input.KeyEvent
 import javafx.scene.input.TransferMode
 import javafx.stage.DirectoryChooser
 import kotlin.collections.ArrayList
-import rename.Rename
-import rename.Transform
+import reviso.Constants
+import reviso.Rename
+import reviso.Transform
 
 class Root : Initializable {
     // JavaFx path properties

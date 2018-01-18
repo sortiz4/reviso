@@ -1,3 +1,5 @@
+package reviso
+
 import java.io.IOException as IoException
 import javafx.application.Application
 import javafx.scene.Scene

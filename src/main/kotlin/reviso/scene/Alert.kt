@@ -1,4 +1,4 @@
-package rename.scene
+package reviso.scene
 
 import java.io.File
 import javafx.geometry.Insets
@@ -9,6 +9,8 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.text.Font
 import javafx.stage.Stage
+import reviso.Constants
+import reviso.Resource
 
 open class Alert : BaseAlert {
     constructor(type: AlertType) : super(type) {

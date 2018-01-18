@@ -1,10 +1,12 @@
+package reviso
+
 object Constants {
     // Text and dialog
-    val TITLE = "Rename"
+    val TITLE = "Reviso"
 
     // Assets and resources
-    val ICON = "rename/scene/icon"
-    val ROOT = "rename/scene/Root"
+    val ICON = "reviso/scene/icon"
+    val ROOT = "reviso/scene/Root"
 
     // Standard transformations
     val CHOICE_UPPER = "Uppercase"
