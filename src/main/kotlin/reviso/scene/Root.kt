@@ -20,16 +20,16 @@ import javafx.stage.DirectoryChooser
 import kotlin.collections.ArrayList
 import reviso.Constants
 import reviso.Rename
-import reviso.Transform
+import reviso.Preview
 
 class Root : Initializable {
-    // JavaFx path properties
+    // JavaFx source directory properties
     @Fxml
     private lateinit var fxPath: TextField
     @Fxml
     private lateinit var fxStatus: Label
 
-    // JavaFx pattern properties
+    // JavaFx pattern matching properties
     @Fxml
     private lateinit var fxSearch: TextField
     @Fxml
@@ -39,7 +39,7 @@ class Root : Initializable {
     @Fxml
     private lateinit var fxRecursiveSearch: CheckBox
 
-    // JavaFx standard properties
+    // JavaFx standard method properties
     @Fxml
     private lateinit var fxChoices: ComboBox<String>
     @Fxml
@@ -72,7 +72,7 @@ class Root : Initializable {
                 this.fxStatus.text = Constants.open(this.fxPath.text)
             } else {
                 // Alert the user when the path is not a directory
-                InvalidPathAlert(file.path).showAndWait()
+                InvalidDirectoryAlert(file.path).showAndWait()
             }
         }
     }
@@ -123,8 +123,8 @@ class Root : Initializable {
             }
             for(node in this.fileTree(this.fxRecursiveSearch.isSelected)) {
                 when(this.fxRegexSearch.isSelected) {
-                    true -> pairs.add(Pair(node, Transform.regex(node, pattern!!, replace)))
-                    false -> pairs.add(Pair(node, Transform.simple(node, search, replace)))
+                    true -> pairs.add(Pair(node, Preview.regex(node, pattern!!, replace)))
+                    false -> pairs.add(Pair(node, Preview.simple(node, search, replace)))
                 }
             }
             if(pairs.size > 0) {
@@ -156,11 +156,11 @@ class Root : Initializable {
         val pairs = ArrayList<Pair<File, File>>()
         for(node in this.fileTree(this.fxRecursiveStandard.isSelected)) {
             when(this.fxChoices.selectionModel.selectedItem) {
-                Constants.CHOICE_LOWER -> pairs.add(Pair(node, Transform.lower(node)))
-                Constants.CHOICE_UPPER -> pairs.add(Pair(node, Transform.upper(node)))
-                Constants.CHOICE_SENTENCE -> pairs.add(Pair(node, Transform.sentence(node)))
-                Constants.CHOICE_TITLE_AP -> pairs.add(Pair(node, Transform.titleAp(node)))
-                Constants.CHOICE_TITLE_SIMPLE -> pairs.add(Pair(node, Transform.titleSimple(node)))
+                Constants.CHOICE_LOWER -> pairs.add(Pair(node, Preview.lower(node)))
+                Constants.CHOICE_UPPER -> pairs.add(Pair(node, Preview.upper(node)))
+                Constants.CHOICE_SENTENCE -> pairs.add(Pair(node, Preview.sentence(node)))
+                Constants.CHOICE_TITLE_AP -> pairs.add(Pair(node, Preview.titleAp(node)))
+                Constants.CHOICE_TITLE_SIMPLE -> pairs.add(Pair(node, Preview.titleSimple(node)))
                 else -> throw RuntimeException() // Unreachable
             }
         }
@@ -199,7 +199,7 @@ class Root : Initializable {
             return tree.filter { node -> node.isFile }
         } else {
             // Alert the user when no directory is found
-            EmptyPathAlert().showAndWait()
+            EmptyDirectoryAlert().showAndWait()
         }
         return emptySequence()
     }

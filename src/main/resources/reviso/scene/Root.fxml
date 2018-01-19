@@ -16,7 +16,7 @@
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
     </padding>
-    <TitledPane collapsible="false" text="Path">
+    <TitledPane collapsible="false" text="Source directory">
         <VBox spacing="5.0">
             <HBox spacing="5.0">
                 <TextField fx:id="fxPath" onKeyReleased="#onKeyRelease"
@@ -27,7 +27,7 @@
             <Label fx:id="fxStatus" text="Nothing is open..."/>
         </VBox>
     </TitledPane>
-    <TitledPane collapsible="false" text="Pattern">
+    <TitledPane collapsible="false" text="Pattern matching">
         <VBox spacing="5.0">
             <TextField fx:id="fxSearch" promptText="Search for..."/>
             <TextField fx:id="fxReplace" promptText="Replace with..."/>
@@ -39,7 +39,7 @@
             </HBox>
         </VBox>
     </TitledPane>
-    <TitledPane collapsible="false" text="Standard">
+    <TitledPane collapsible="false" text="Standard methods">
         <VBox spacing="5.0">
             <ComboBox fx:id="fxChoices" maxWidth="Infinity"/>
             <HBox alignment="CENTER_RIGHT" spacing="5.0">

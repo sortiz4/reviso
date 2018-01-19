@@ -5,7 +5,7 @@ import java.util.regex.Pattern
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
-object Transform {
+object Preview {
     /**
      * Words in AP titles that should be uncapitalized.
      */
@@ -64,7 +64,7 @@ object Transform {
             if(i == 0 || i == words.size - 1) {
                 words[i] = words[i].capitalize()
             } else {
-                if(words[i] !in Transform.AP_WORDS) {
+                if(words[i] !in Preview.AP_WORDS) {
                     words[i] = words[i].capitalize()
                 }
             }

@@ -20,19 +20,19 @@ open class Alert : BaseAlert {
     }
 }
 
-open class PathAlert : Alert {
+open class DirectoryAlert : Alert {
     constructor(message: String) : super(AlertType.ERROR) {
-        this.title = "Path error"
+        this.title = "Directory error"
         this.headerText = message
         this.contentText = "Please open a directory to begin."
     }
 }
 
-class EmptyPathAlert : PathAlert {
+class EmptyDirectoryAlert : DirectoryAlert {
     constructor() : super("No directory was found.")
 }
 
-class InvalidPathAlert : PathAlert {
+class InvalidDirectoryAlert : DirectoryAlert {
     constructor(path: String) : super("'$path' is not a directory.")
 }
 

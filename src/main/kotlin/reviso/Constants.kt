@@ -2,18 +2,18 @@ package reviso
 
 object Constants {
     // Text and dialog
-    val TITLE = "Reviso"
+    const val TITLE = "Reviso"
 
     // Assets and resources
-    val ICON = "reviso/scene/icon"
-    val ROOT = "reviso/scene/Root"
+    const val ICON = "reviso/scene/icon"
+    const val ROOT = "reviso/scene/Root"
 
     // Standard transformations
-    val CHOICE_UPPER = "Uppercase"
-    val CHOICE_LOWER = "Lowercase"
-    val CHOICE_SENTENCE = "Sentence"
-    val CHOICE_TITLE_AP = "Title (AP)"
-    val CHOICE_TITLE_SIMPLE = "Title (simple)"
+    const val CHOICE_UPPER = "Uppercase"
+    const val CHOICE_LOWER = "Lowercase"
+    const val CHOICE_SENTENCE = "Sentence"
+    const val CHOICE_TITLE_AP = "Title (AP)"
+    const val CHOICE_TITLE_SIMPLE = "Title (simple)"
     val CHOICES = arrayOf(
             CHOICE_LOWER,
             CHOICE_UPPER,
