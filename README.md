@@ -20,6 +20,7 @@ In addition to the requirements above, those seeking to compile must have...
 
 Once these requirements have been met, simply clone the repository and execute
 `gradle build`. An executable `jar` will be created under `./build/libs/`.
+Binary assets, such as icons, are not included.
 
 ## Usage
 Before starting, you must enter the directory containing the files you would
