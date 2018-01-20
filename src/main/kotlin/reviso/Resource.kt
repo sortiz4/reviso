@@ -17,6 +17,11 @@ object Resource {
         return Image(load(path + ".png").openStream(), 0.0, 0.0, true, true)
     }
 
+    @Throws(IoException::class)
+    fun png(paths: Array<String>): Array<Image> {
+        return paths.map { path -> Resource.png(path) }.toTypedArray()
+    }
+
     private fun load(path: String): Url {
         return Resource::class.java.classLoader.getResource(path)
     }

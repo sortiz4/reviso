@@ -15,7 +15,7 @@ import reviso.Resource
 open class Alert : BaseAlert {
     constructor(type: AlertType) : super(type) {
         val stage = this.dialogPane.scene.window as Stage
-        stage.icons.add(Resource.png(Constants.ICON))
+        stage.icons.addAll(Resource.png(Constants.ICON_SET))
         this.buttonTypes[0] = ButtonType("Ok")
     }
 }

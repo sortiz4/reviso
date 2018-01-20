@@ -5,8 +5,19 @@ object Constants {
     const val TITLE = "Reviso"
 
     // Assets and resources
-    const val ICON = "reviso/scene/icon"
-    const val ROOT = "reviso/scene/Root"
+    const val ICON_16 = "reviso/icon/16"
+    const val ICON_32 = "reviso/icon/32"
+    const val ICON_64 = "reviso/icon/64"
+    const val ICON_128 = "reviso/icon/128"
+    const val ICON_256 = "reviso/icon/256"
+    val ICON_SET = arrayOf(
+            Constants.ICON_16,
+            Constants.ICON_32,
+            Constants.ICON_64,
+            Constants.ICON_128,
+            Constants.ICON_256
+    )
+    const val SCENE_ROOT = "reviso/scene/Root"
 
     // Standard transformations
     const val CHOICE_UPPER = "Uppercase"
