@@ -56,11 +56,11 @@ string may be left blank to remove the search string from the file name.
 This section allows you to rename files based on standard methods.
 
 ### Methods
-1. `Lowercase`
-2. `Uppercase`
-3. `Sentence`
-4. `Title (AP)`
-5. `Title (simple)`
+1. `Lowercase` decapitalizes every character.
+2. `Uppercase` capitalizes every character.
+3. `Sentence` capitalizes the first word.
+4. `Title (AP)` capitalizes most words (AP style).
+5. `Title (simple)` capitalizes every word.
 
 ### Options
 1. `Recursive` behaves exactly like the same option above.
