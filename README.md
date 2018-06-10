@@ -1,6 +1,6 @@
 # Reviso
-Reviso is a powerful desktop application for renaming large collections of
-files at the press of a button. Users can search for simple and complex
+Reviso is a powerful desktop application capable of renaming large collections
+of files at the press of a button. Users can search for simple and complex
 patterns using regular expressions, or rely on a commonly used set of methods
 to rename their files.
 
