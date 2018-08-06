@@ -19,7 +19,7 @@ object Preview {
      */
     fun regex(file: File, search: Pattern, replace: String): File {
         val name = search.matcher(file.name).replaceAll(replace)
-        return File(file.parent, name)
+        return file(file.parent, name)
     }
 
     /**
@@ -27,7 +27,7 @@ object Preview {
      */
     fun simple(file: File, search: String, replace: String): File {
         val name = file.name.replace(search, replace)
-        return File(file.parent, name)
+        return file(file.parent, name)
     }
 
     /**
@@ -35,7 +35,7 @@ object Preview {
      */
     fun lower(file: File): File {
         val name = file.name.toLowerCase()
-        return File(file.parent, name)
+        return file(file.parent, name)
     }
 
     /**
@@ -43,7 +43,7 @@ object Preview {
      */
     fun upper(file: File): File {
         val name = file.name.toUpperCase()
-        return File(file.parent, name)
+        return file(file.parent, name)
     }
 
     /**
@@ -51,7 +51,7 @@ object Preview {
      */
     fun sentence(file: File): File {
         val name = file.name.toLowerCase().capitalize()
-        return File(file.parent, name)
+        return file(file.parent, name)
     }
 
     /**
@@ -64,13 +64,13 @@ object Preview {
             if(i == 0 || i == words.size - 1) {
                 words[i] = words[i].capitalize()
             } else {
-                if(words[i] !in Preview.AP_WORDS) {
+                if(words[i] !in AP_WORDS) {
                     words[i] = words[i].capitalize()
                 }
             }
         }
         val name = words.joinToString(" ")
-        return File(file.parent, name)
+        return file(file.parent, name)
     }
 
     /**
@@ -78,6 +78,16 @@ object Preview {
      */
     fun titleSimple(file: File): File {
         val name = file.name.split(' ').joinToString(" ") { s -> s.toLowerCase().capitalize() }
-        return File(file.parent, name)
+        return file(file.parent, name)
+    }
+
+    /**
+     * Returns a file if the name is not empty. Throws an exception otherwise.
+     */
+    private fun file(parent: String, child: String): File {
+        if(child.isNotEmpty()) {
+            return File(parent, child)
+        }
+        throw IllegalArgumentException("The file name must not be empty.")
     }
 }

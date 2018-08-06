@@ -15,12 +15,14 @@ for many years.
 ## Compilation
 In addition to the requirements above, those seeking to compile must have...
 
-- Gradle 4.2 (or greater)
 - Java SDK 8 (or greater)
+- Gradle 4.2 (or greater)
+- Python 3.5 (or greater)
 
 Once these requirements have been met, simply clone the repository and execute
-`gradle build`. An executable `jar` will be created under `./build/libs/`.
-Binary assets, such as icons, are not included.
+`py setup.py -i` (this will download the required icons). Once completed, the
+application can be compiled by executing `gradle build`. An executable `jar`
+will be created under `./build/libs/`.
 
 ## Usage
 Before starting, you must enter the directory containing the files you would
