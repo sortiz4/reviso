@@ -21,8 +21,8 @@ In addition to the requirements above, those seeking to compile must have...
 
 Once these requirements have been met, simply clone the repository and execute
 `py setup.py -i` (this will download the required icons). Once completed, the
-application can be compiled by executing `gradle build`. An executable `jar`
-will be created under `./build/libs/`.
+application can be compiled by executing `gradle build`. A distribution will
+be created under `./build/distributions/`.
 
 ## Usage
 Before starting, you must enter the directory containing the files you would
