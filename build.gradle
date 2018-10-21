@@ -1,9 +1,9 @@
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.2.60"
+    id "org.jetbrains.kotlin.jvm" version "1.2.70"
 }
 
 group "reviso"
-version "1.1"
+version "1.2"
 
 apply plugin: "kotlin"
 apply plugin: "application"
@@ -12,11 +12,24 @@ mainClassName = "reviso.Main"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+def os = org.gradle.internal.os.OperatingSystem.current()
+if(os.isWindows()) {
+    os = 'win'
+} else if(os.isLinux()) {
+    os = 'linux'
+} else if(os.isMacOsX()) {
+    os = 'mac'
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    compile "org.openjfx:javafx-base:11:${os}"
+    compile "org.openjfx:javafx-controls:11:${os}"
+    compile "org.openjfx:javafx-fxml:11:${os}"
+    compile "org.openjfx:javafx-graphics:11:${os}"
     compile "org.jetbrains.kotlin:kotlin-stdlib"
 }
 
@@ -26,15 +39,4 @@ compileKotlin {
 
 compileTestKotlin {
     kotlinOptions.jvmTarget = targetCompatibility
-}
-
-jar {
-    manifest {
-        attributes "Main-Class": "reviso.Main"
-    }
-    from {
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
 }
