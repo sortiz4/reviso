@@ -10,14 +10,14 @@ for many years.
 
 ## Requirements
 - Linux, MacOS, or Windows
-- Java 8 (or greater)
+- Java 8+
 
 ## Compilation
 In addition to the requirements above, those seeking to compile must have...
 
-- Java SDK 8 (or greater)
-- Gradle 4.2 (or greater)
-- Python 3.5 (or greater)
+- Java SDK 8+
+- Gradle 4.2+
+- Python 3.5+
 
 Once these requirements have been met, simply clone the repository and execute
 `py setup.py -i` (this will download the required icons). Once completed, the
