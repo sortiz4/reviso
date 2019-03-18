@@ -9,10 +9,12 @@ object Preview {
     /**
      * Words in AP titles that should be uncapitalized.
      */
-    private val AP_WORDS = HashSet(arrayListOf(
+    private val AP_WORDS = HashSet(
+        arrayListOf(
             "a", "an", "and", "at", "but", "by", "for", "in", "nor",
             "of", "on", "or", "so", "the", "to", "up", "yet"
-    ))
+        )
+    )
 
     /**
      * Replaces all matches in the file name (regex).

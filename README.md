@@ -15,8 +15,8 @@ for many years.
 ## Compilation
 In addition to the requirements above, those seeking to compile must have...
 
-- Java SDK 8+
-- Gradle 4.2+
+- Java SDK 11+
+- Gradle 5.2+
 - Python 3.5+
 
 Once these requirements have been met, simply clone the repository and execute

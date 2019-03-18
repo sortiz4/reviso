@@ -88,18 +88,18 @@ class Root : Initializable {
 
     @Fxml
     fun onDragDrop(event: DragEvent) {
-        var set = false
+        var didSet = false
         val selection = event.dragboard
         if(selection.hasFiles()) {
             for(file in selection.files) {
                 if(file.isDirectory) {
                     // Set the path to the first directory
                     fxPath.text = file.path
-                    set = true
+                    didSet = true
                     break
                 }
             }
-            if(!set && selection.files.size > 0) {
+            if(!didSet && selection.files.size > 0) {
                 // Infer the path from the first file
                 fxPath.text = selection.files[0].parent
             }
@@ -116,35 +116,33 @@ class Root : Initializable {
     @Fxml
     fun onPreviewSearch() {
         if(!fxSearch.text.isEmpty()) {
-            val pairs = search()
-            if(pairs.isNotEmpty()) {
-                PreviewAlert(pairs).showAndWait()
-            }
+            PreviewAlert(search()).showAndWait()
         }
     }
 
     @Fxml
     fun onExecuteSearch() {
         if(!fxSearch.text.isEmpty()) {
-            for((source, target) in search()) {
+            val pairs = search()
+            for((source, target) in pairs) {
                 source.renameTo(target)
             }
+            ResultAlert(pairs.size).showAndWait()
         }
     }
 
     @Fxml
     fun onPreviewStandard() {
-        val pairs = standard()
-        if(pairs.isNotEmpty()) {
-            PreviewAlert(pairs).showAndWait()
-        }
+        PreviewAlert(standard()).showAndWait()
     }
 
     @Fxml
     fun onExecuteStandard() {
-        for((source, target) in standard()) {
+        val pairs = standard()
+        for((source, target) in pairs) {
             source.renameTo(target)
         }
+        ResultAlert(pairs.size).showAndWait()
     }
 
     override fun initialize(resource: Url?, bundle: ResourceBundle?) {
@@ -164,7 +162,7 @@ class Root : Initializable {
             return tree.filter { node -> node.isFile }
         } else {
             // Alert the user when no directory is found
-            EmptyDirectoryAlert().showAndWait()
+            NoDirectoryAlert().showAndWait()
         }
         return emptySequence()
     }
