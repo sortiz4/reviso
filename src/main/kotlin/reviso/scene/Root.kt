@@ -1,6 +1,7 @@
 package reviso.scene
 
 import java.io.File
+import java.io.IOException as IoException
 import java.net.URL as Url
 import java.util.ResourceBundle
 import java.util.regex.Pattern
@@ -22,6 +23,8 @@ import reviso.Constants
 import reviso.Preview
 
 class Root : Initializable {
+    private class NoDirectoryException : IoException()
+
     // JavaFx source directory properties
     @Fxml
     private lateinit var fxPath: TextField
@@ -116,33 +119,41 @@ class Root : Initializable {
     @Fxml
     fun onPreviewSearch() {
         if(!fxSearch.text.isEmpty()) {
-            PreviewAlert(search()).showAndWait()
+            onAction {
+                PreviewAlert(search()).showAndWait()
+            }
         }
     }
 
     @Fxml
     fun onExecuteSearch() {
         if(!fxSearch.text.isEmpty()) {
-            val pairs = search()
-            for((source, target) in pairs) {
-                source.renameTo(target)
+            onAction {
+                val pairs = search()
+                for((source, target) in pairs) {
+                    source.renameTo(target)
+                }
+                ResultAlert(pairs.size).showAndWait()
             }
-            ResultAlert(pairs.size).showAndWait()
         }
     }
 
     @Fxml
     fun onPreviewStandard() {
-        PreviewAlert(standard()).showAndWait()
+        onAction {
+            PreviewAlert(standard()).showAndWait()
+        }
     }
 
     @Fxml
     fun onExecuteStandard() {
-        val pairs = standard()
-        for((source, target) in pairs) {
-            source.renameTo(target)
+        onAction {
+            val pairs = standard()
+            for((source, target) in pairs) {
+                source.renameTo(target)
+            }
+            ResultAlert(pairs.size).showAndWait()
         }
-        ResultAlert(pairs.size).showAndWait()
     }
 
     override fun initialize(resource: Url?, bundle: ResourceBundle?) {
@@ -151,6 +162,15 @@ class Root : Initializable {
         fxChoices.selectionModel.selectFirst()
     }
 
+    private fun onAction(action: () -> Unit) {
+        try {
+            action()
+        } catch(_: NoDirectoryException) {
+            NoDirectoryAlert().showAndWait()
+        }
+    }
+
+    @Throws(NoDirectoryException::class)
     private fun fileTree(recursive: Boolean): Sequence<File> {
         if(directory != null) {
             // Collect the file tree as a sequence
@@ -161,12 +181,12 @@ class Root : Initializable {
             }
             return tree.filter { node -> node.isFile }
         } else {
-            // Alert the user when no directory is found
-            NoDirectoryAlert().showAndWait()
+            throw NoDirectoryException()
         }
         return emptySequence()
     }
 
+    @Throws(NoDirectoryException::class)
     private fun search(): List<Pair<File, File>> {
         val pairs = ArrayList<Pair<File, File>>()
         val search = fxSearch.text
@@ -175,6 +195,7 @@ class Root : Initializable {
             true -> Pattern.compile(search)
             false -> null
         }
+
         // Collect a preview of each renamed file
         for(source in fileTree(fxRecursiveSearch.isSelected)) {
             val target = try {
@@ -193,8 +214,10 @@ class Root : Initializable {
         return pairs
     }
 
+    @Throws(NoDirectoryException::class)
     private fun standard(): List<Pair<File, File>> {
         val pairs = ArrayList<Pair<File, File>>()
+
         // Collect a preview of each renamed file
         for(source in fileTree(fxRecursiveStandard.isSelected)) {
             val target = try {
