@@ -22,7 +22,7 @@ open class Alert : BaseAlert {
 
 open class DirectoryAlert : Alert {
     constructor(message: String) : super(AlertType.ERROR) {
-        title = "Directory error"
+        title = "Error"
         headerText = message
         contentText = "Please open a directory to begin."
     }
@@ -37,9 +37,10 @@ class NoDirectoryAlert : DirectoryAlert {
 }
 
 class PreviewAlert : Alert {
-    constructor(files: List<Pair<File, File>>) : super(AlertType.INFORMATION) {
+    constructor(files: List<Pair<File, File>>) : super(AlertType.CONFIRMATION) {
         title = "Preview"
-        headerText = "Review the changes."
+        headerText = "Preview the changes."
+        buttonTypes.remove(1, buttonTypes.size)
         if(files.isEmpty()) {
             contentText = "No changes detected."
         } else {
@@ -57,6 +58,7 @@ class PreviewAlert : Alert {
 
             // Construct an optimal viewport for the preview
             val text = TextArea(preview.joinToString("\n"))
+            HBox.setHgrow(text, Priority.ALWAYS)
             text.font = Font.font("Monospaced")
             text.prefColumnCount = cols
             text.prefRowCount = rows
@@ -64,7 +66,6 @@ class PreviewAlert : Alert {
             text.isWrapText = false
 
             val box = HBox(text)
-            HBox.setHgrow(text, Priority.ALWAYS)
             box.padding = Insets(inset, inset, 0.0, inset)
             dialogPane.content = box
         }
