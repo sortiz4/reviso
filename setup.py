@@ -9,26 +9,26 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class Icons:
-    HELP = 'Downloads icon assets.'
+    HELP = 'Downloads the icon assets.'
     SIZES = [16, 32, 64, 128, 256]
     DIR = os.path.join(BASE_DIR, 'src/main/resources/reviso/icon')
     URL = 'https://github.com/sortiz4/reviso/releases/download/1.0/reviso-1.0.zip'
 
 
 class Command:
-    help = 'Downloads assets required by this application.'
+    help = 'Downloads the assets required by this application.'
 
     def __init__(self):
-        parser = argparse.ArgumentParser(description=Command.help)
+        parser = argparse.ArgumentParser(description=self.help)
         parser.add_argument('-i', '--icons', action='store_true', help=Icons.HELP)
         self.args = parser.parse_args()
 
     def handle(self):
         if self.args.icons:
-            Command.icons()
+            self.icons()
 
-    @staticmethod
-    def icons():
+    @classmethod
+    def icons(cls):
         # Make the directory if it doesn't exist
         if not os.path.exists(Icons.DIR):
             os.makedirs(Icons.DIR)
