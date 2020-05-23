@@ -48,11 +48,10 @@ the search string will be replaced by the replacement string. The replacement
 string may be left blank to remove the search string from the file name.
 
 ### Options
-1. `Regex` will treat the search and replacement strings as regular expressions (see the
-   [syntax](https://docs.oracle.com/javase/9/docs/api/java/util/regex/Pattern.html#sum)
-   for more information).
-2. `Recursive` will rename all files *under* the currently open directory (i.e. all
-   subdirectories will be included).
+1. `Regex` will treat the search and replacement strings as regular expressions
+   (see the [syntax][1] for more information).
+2. `Recursive` will rename all files *under* the currently open directory (i.e.
+   all subdirectories will be included).
 
 ## Standard methods
 This section allows you to rename files based on standard methods.
@@ -66,3 +65,5 @@ This section allows you to rename files based on standard methods.
 
 ### Options
 1. `Recursive` behaves exactly like the same option above.
+
+[1]: https://docs.oracle.com/javase/9/docs/api/java/util/regex/Pattern.html#sum
