@@ -11,8 +11,23 @@ object Preview {
      */
     private val AP_WORDS = HashSet(
         arrayListOf(
-            "a", "an", "and", "at", "but", "by", "for", "in", "nor",
-            "of", "on", "or", "so", "the", "to", "up", "yet"
+            "a",
+            "an",
+            "and",
+            "at",
+            "but",
+            "by",
+            "for",
+            "in",
+            "nor",
+            "of",
+            "on",
+            "or",
+            "so",
+            "the",
+            "to",
+            "up",
+            "yet"
         )
     )
 
