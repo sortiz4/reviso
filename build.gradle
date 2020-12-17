@@ -13,11 +13,11 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 def os = org.gradle.internal.os.OperatingSystem.current()
-if(os.isWindows()) {
+if (os.isWindows()) {
     os = 'win'
-} else if(os.isLinux()) {
+} else if (os.isLinux()) {
     os = 'linux'
-} else if(os.isMacOsX()) {
+} else if (os.isMacOsX()) {
     os = 'mac'
 }
 

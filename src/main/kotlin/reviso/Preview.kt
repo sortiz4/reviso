@@ -61,12 +61,12 @@ object Preview {
      */
     fun titleAp(file: File): File {
         val words = file.name.split(' ') as ArrayList
-        for(i in 0 until words.size) {
+        for (i in 0 until words.size) {
             words[i] = words[i].toLowerCase()
-            if(i == 0 || i == words.size - 1) {
+            if (i == 0 || i == words.size - 1) {
                 words[i] = words[i].capitalize()
             } else {
-                if(words[i] !in AP_WORDS) {
+                if (words[i] !in AP_WORDS) {
                     words[i] = words[i].capitalize()
                 }
             }
@@ -87,7 +87,7 @@ object Preview {
      * Returns a file if the name is not empty. Throws an exception otherwise.
      */
     private fun file(parent: String, child: String): File {
-        if(child.isNotEmpty()) {
+        if (child.isNotEmpty()) {
             return File(parent, child)
         }
         throw IllegalArgumentException("The file name must not be empty.")

@@ -41,7 +41,7 @@ class PreviewAlert : Alert {
         title = "Preview"
         headerText = "Preview the changes."
         buttonTypes.remove(1, buttonTypes.size)
-        if(files.isEmpty()) {
+        if (files.isEmpty()) {
             contentText = "No changes detected."
         } else {
             isResizable = true
@@ -76,7 +76,7 @@ class ResultAlert : Alert {
     constructor(count: Int) : super(AlertType.INFORMATION) {
         title = "Result"
         headerText = "Rename complete."
-        contentText = if(count > 0) {
+        contentText = if (count > 0) {
             "$count file(s) renamed."
         } else {
             "Nothing was renamed."

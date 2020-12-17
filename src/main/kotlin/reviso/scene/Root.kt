@@ -53,12 +53,12 @@ class Root : Initializable {
     @Fxml
     fun onBrowse(event: ActionEvent) {
         val window = DirectoryChooser()
-        if(directory != null) {
+        if (directory != null) {
             // Start from the current directory
             window.initialDirectory = File(directory)
         }
         val result = window.showDialog((event.target as Node).scene.window)
-        if(result != null) {
+        if (result != null) {
             // Update the path field with the selected directory
             fxPath.text = result.path
         }
@@ -68,9 +68,9 @@ class Root : Initializable {
     fun onOpen() {
         // Trim the input and ignore empty requests
         val path = fxPath.text.trim()
-        if(!path.isEmpty()) {
+        if (!path.isEmpty()) {
             val file = File(path)
-            if(file.isDirectory) {
+            if (file.isDirectory) {
                 // Set the directory and status when the path is a directory
                 directory = fxPath.text
                 fxStatus.text = Constants.open(fxPath.text)
@@ -83,7 +83,7 @@ class Root : Initializable {
 
     @Fxml
     fun onDragOver(event: DragEvent) {
-        if(event.dragboard.hasFiles()) {
+        if (event.dragboard.hasFiles()) {
             // Indicate this view supports file dragging
             event.acceptTransferModes(TransferMode.COPY)
         }
@@ -93,16 +93,16 @@ class Root : Initializable {
     fun onDragDrop(event: DragEvent) {
         var didSet = false
         val selection = event.dragboard
-        if(selection.hasFiles()) {
-            for(file in selection.files) {
-                if(file.isDirectory) {
+        if (selection.hasFiles()) {
+            for (file in selection.files) {
+                if (file.isDirectory) {
                     // Set the path to the first directory
                     fxPath.text = file.path
                     didSet = true
                     break
                 }
             }
-            if(!didSet && selection.files.size > 0) {
+            if (!didSet && selection.files.size > 0) {
                 // Infer the path from the first file
                 fxPath.text = selection.files[0].parent
             }
@@ -111,14 +111,14 @@ class Root : Initializable {
 
     @Fxml
     fun onKeyRelease(event: KeyEvent) {
-        if(event.code == KeyCode.ENTER){
+        if (event.code == KeyCode.ENTER){
             onOpen()
         }
     }
 
     @Fxml
     fun onPreviewSearch() {
-        if(!fxSearch.text.isEmpty()) {
+        if (!fxSearch.text.isEmpty()) {
             onAction {
                 PreviewAlert(search()).showAndWait()
             }
@@ -127,10 +127,10 @@ class Root : Initializable {
 
     @Fxml
     fun onExecuteSearch() {
-        if(!fxSearch.text.isEmpty()) {
+        if (!fxSearch.text.isEmpty()) {
             onAction {
                 val pairs = search()
-                for((source, target) in pairs) {
+                for ((source, target) in pairs) {
                     source.renameTo(target)
                 }
                 ResultAlert(pairs.size).showAndWait()
@@ -149,7 +149,7 @@ class Root : Initializable {
     fun onExecuteStandard() {
         onAction {
             val pairs = standard()
-            for((source, target) in pairs) {
+            for ((source, target) in pairs) {
                 source.renameTo(target)
             }
             ResultAlert(pairs.size).showAndWait()
@@ -165,14 +165,14 @@ class Root : Initializable {
     private fun onAction(action: () -> Unit) {
         try {
             action()
-        } catch(_: NoDirectoryException) {
+        } catch (_: NoDirectoryException) {
             NoDirectoryAlert().showAndWait()
         }
     }
 
     @Throws(NoDirectoryException::class)
     private fun fileTree(recursive: Boolean): Sequence<File> {
-        if(directory != null) {
+        if (directory != null) {
             // Collect the file tree as a sequence
             val file = File(directory)
             val tree = when(recursive) {
@@ -197,16 +197,16 @@ class Root : Initializable {
         }
 
         // Collect a preview of each renamed file
-        for(source in fileTree(fxRecursiveSearch.isSelected)) {
+        for (source in fileTree(fxRecursiveSearch.isSelected)) {
             val target = try {
                 when(fxRegexSearch.isSelected) {
                     true -> Preview.regex(source, pattern!!, replace)
                     false -> Preview.simple(source, search, replace)
                 }
-            } catch(_: IllegalArgumentException) {
+            } catch (_: IllegalArgumentException) {
                 continue
             }
-            if(source.name != target.name) {
+            if (source.name != target.name) {
                 // Ignore unchanged file names
                 pairs.add(Pair(source, target))
             }
@@ -219,7 +219,7 @@ class Root : Initializable {
         val pairs = ArrayList<Pair<File, File>>()
 
         // Collect a preview of each renamed file
-        for(source in fileTree(fxRecursiveStandard.isSelected)) {
+        for (source in fileTree(fxRecursiveStandard.isSelected)) {
             val target = try {
                 when(fxChoices.selectionModel.selectedItem) {
                     Constants.CHOICE_LOWER -> Preview.lower(source)
@@ -229,10 +229,10 @@ class Root : Initializable {
                     Constants.CHOICE_TITLE_SIMPLE -> Preview.titleSimple(source)
                     else -> throw RuntimeException() // Unreachable
                 }
-            } catch(_: IllegalArgumentException) {
+            } catch (_: IllegalArgumentException) {
                 continue
             }
-            if(source.name != target.name) {
+            if (source.name != target.name) {
                 // Ignore unchanged file names
                 pairs.add(Pair(source, target))
             }
