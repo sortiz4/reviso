@@ -12,7 +12,7 @@ class Icons:
     HELP = 'Downloads the icon assets.'
     SIZES = [16, 32, 64, 128, 256]
     DIR = os.path.join(BASE_DIR, 'src/main/resources/reviso/icon')
-    URL = 'https://github.com/sortiz4/reviso/releases/download/1.0/reviso-1.0.zip'
+    URL = 'https://github.com/sortiz4/reviso/releases/download/1.0/1.0.zip'
 
 
 class Command:
