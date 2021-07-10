@@ -6,21 +6,18 @@ from urllib import request
 from zipfile import ZipFile
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-
-class Icons:
-    HELP = 'Downloads the icon assets.'
-    SIZES = [16, 32, 64, 128, 256]
-    DIR = os.path.join(BASE_DIR, 'src/main/resources/reviso/icon')
-    URL = 'https://github.com/sortiz4/reviso/releases/download/1.0/1.0.zip'
+ICON_HELP = 'Downloads the icon assets.'
+ICON_SIZES = [16, 32, 64, 128, 256]
+ICON_DIR = os.path.join(BASE_DIR, 'src/main/resources/reviso/icon')
+ICON_URL = 'https://github.com/sortiz4/reviso/releases/download/1.0/1.0.zip'
 
 
 class Command:
-    help = 'Downloads the assets required by this application.'
+    help = 'Downloads the required assets.'
 
     def __init__(self):
         parser = argparse.ArgumentParser(description=self.help)
-        parser.add_argument('-i', '--icons', action='store_true', help=Icons.HELP)
+        parser.add_argument('-i', '--icons', action='store_true', help=ICON_HELP)
         self.args = parser.parse_args()
 
     def handle(self):
@@ -30,19 +27,19 @@ class Command:
     @classmethod
     def icons(cls):
         # Make the directory if it doesn't exist
-        if not os.path.exists(Icons.DIR):
-            os.makedirs(Icons.DIR)
+        if not os.path.exists(ICON_DIR):
+            os.makedirs(ICON_DIR)
 
         # Download the icon archive to memory
-        buffer = request.urlopen(Icons.URL).read()
+        buffer = request.urlopen(ICON_URL).read()
         archive = BytesIO(buffer)
 
         # Extract the icons
         archive = ZipFile(archive)
-        for size in Icons.SIZES:
+        for size in ICON_SIZES:
             name = '{}.png'.format(size)
             buffer = archive.read('icons/png/' + name)
-            path = os.path.join(Icons.DIR, name)
+            path = os.path.join(ICON_DIR, name)
             with open(path, 'wb') as icon:
                 icon.write(buffer)
 
