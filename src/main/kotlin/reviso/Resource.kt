@@ -14,7 +14,7 @@ object Resource {
 
     @Throws(IoException::class)
     fun png(path: String): Image {
-        return Image(load("$path.png").openStream(), 0.0, 0.0, true, true)
+        return Image(load("$path.png")?.openStream(), 0.0, 0.0, true, true)
     }
 
     @Throws(IoException::class)
@@ -22,7 +22,7 @@ object Resource {
         return paths.map { path -> png(path) }.toTypedArray()
     }
 
-    private fun load(path: String): Url {
+    private fun load(path: String): Url? {
         return Resource::class.java.classLoader.getResource(path)
     }
 }

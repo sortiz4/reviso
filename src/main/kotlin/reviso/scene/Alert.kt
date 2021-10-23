@@ -12,32 +12,28 @@ import javafx.stage.Stage
 import reviso.Constants
 import reviso.Resource
 
-open class Alert : BaseAlert {
-    constructor(type: AlertType) : super(type) {
+open class Alert(type: AlertType) : BaseAlert(type) {
+    init {
         val stage = dialogPane.scene.window as Stage
         stage.icons.addAll(Resource.png(Constants.ICON_SET))
         buttonTypes[0] = ButtonType("Ok")
     }
 }
 
-open class DirectoryAlert : Alert {
-    constructor(message: String) : super(AlertType.ERROR) {
+open class DirectoryAlert(message: String) : Alert(AlertType.ERROR) {
+    init {
         title = "Error"
         headerText = message
         contentText = "Please open a directory to begin."
     }
 }
 
-class InvalidDirectoryAlert : DirectoryAlert {
-    constructor(path: String) : super("'$path' is not a directory.")
-}
+class InvalidDirectoryAlert(path: String) : DirectoryAlert("'$path' is not a directory.")
 
-class NoDirectoryAlert : DirectoryAlert {
-    constructor() : super("No directory was found.")
-}
+class NoDirectoryAlert : DirectoryAlert("No directory was found.")
 
-class PreviewAlert : Alert {
-    constructor(files: List<Pair<File, File>>) : super(AlertType.CONFIRMATION) {
+class PreviewAlert(files: List<Pair<File, File>>) : Alert(AlertType.CONFIRMATION) {
+    init {
         title = "Preview"
         headerText = "Preview the changes."
         buttonTypes.remove(1, buttonTypes.size)
@@ -48,12 +44,12 @@ class PreviewAlert : Alert {
 
             // Constructs a formatted preview (pads the first column to enhance readability)
             val reduced = files.map { (old, new) -> Pair(old.name, new.name) }
-            val padding = reduced.maxBy { (old, _) -> old.length }?.first?.length!!
+            val padding = reduced.maxByOrNull { (old, _) -> old.length }?.first?.length!!
             val preview = reduced.map { (old, new) -> "${old.padEnd(padding)} => $new" }
 
             // View dimensions (rows, columns, insets)
-            val cols = preview.maxBy { entry -> entry.length }?.length!!
-            val rows = Math.min(preview.size, TextArea.DEFAULT_PREF_ROW_COUNT)
+            val cols = preview.maxByOrNull { entry -> entry.length }?.length!!
+            val rows = preview.size.coerceAtMost(TextArea.DEFAULT_PREF_ROW_COUNT)
             val inset = 10.0
 
             // Construct an optimal viewport for the preview
@@ -72,8 +68,8 @@ class PreviewAlert : Alert {
     }
 }
 
-class ResultAlert : Alert {
-    constructor(count: Int) : super(AlertType.INFORMATION) {
+class ResultAlert(count: Int) : Alert(AlertType.INFORMATION) {
+    init {
         title = "Result"
         headerText = "Rename complete."
         contentText = if (count > 0) {

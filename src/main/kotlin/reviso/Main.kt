@@ -23,7 +23,7 @@ class Main : Application() {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Application.launch(Main::class.java, *args)
+            launch(Main::class.java, *args)
         }
     }
 }

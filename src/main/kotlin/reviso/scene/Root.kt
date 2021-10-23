@@ -68,7 +68,7 @@ class Root : Initializable {
     fun onOpen() {
         // Trim the input and ignore empty requests
         val path = fxPath.text.trim()
-        if (!path.isEmpty()) {
+        if (path.isNotEmpty()) {
             val file = File(path)
             if (file.isDirectory) {
                 // Set the directory and status when the path is a directory
@@ -118,7 +118,7 @@ class Root : Initializable {
 
     @Fxml
     fun onPreviewSearch() {
-        if (!fxSearch.text.isEmpty()) {
+        if (fxSearch.text.isNotEmpty()) {
             onAction {
                 PreviewAlert(search()).showAndWait()
             }
@@ -127,7 +127,7 @@ class Root : Initializable {
 
     @Fxml
     fun onExecuteSearch() {
-        if (!fxSearch.text.isEmpty()) {
+        if (fxSearch.text.isNotEmpty()) {
             onAction {
                 val pairs = search()
                 for ((source, target) in pairs) {
@@ -180,10 +180,8 @@ class Root : Initializable {
                 false -> file.walk().maxDepth(1)
             }
             return tree.filter { node -> node.isFile }
-        } else {
-            throw NoDirectoryException()
         }
-        return emptySequence()
+        throw NoDirectoryException()
     }
 
     @Throws(NoDirectoryException::class)
@@ -221,7 +219,7 @@ class Root : Initializable {
         // Collect a preview of each renamed file
         for (source in fileTree(fxRecursiveStandard.isSelected)) {
             val target = try {
-                when(fxChoices.selectionModel.selectedItem) {
+                when (fxChoices.selectionModel.selectedItem) {
                     Constants.CHOICE_LOWER -> Preview.lower(source)
                     Constants.CHOICE_UPPER -> Preview.upper(source)
                     Constants.CHOICE_SENTENCE -> Preview.sentence(source)

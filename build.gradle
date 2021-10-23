@@ -1,36 +1,35 @@
 plugins {
-    id "org.jetbrains.kotlin.jvm" version "1.3.21"
+    id "org.jetbrains.kotlin.jvm" version "1.5.31"
+    id "org.openjfx.javafxplugin" version "0.0.10"
 }
 
 group "reviso"
-version "1.4"
+version "2.0"
 
 apply plugin: "kotlin"
 apply plugin: "application"
 
-mainClassName = "reviso.Main"
+mainClassName = "${group}.Main"
 sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-def os = org.gradle.internal.os.OperatingSystem.current()
-if (os.isWindows()) {
-    os = 'win'
-} else if (os.isLinux()) {
-    os = 'linux'
-} else if (os.isMacOsX()) {
-    os = 'mac'
-}
+targetCompatibility = sourceCompatibility
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile "org.openjfx:javafx-base:12:${os}"
-    compile "org.openjfx:javafx-controls:12:${os}"
-    compile "org.openjfx:javafx-fxml:12:${os}"
-    compile "org.openjfx:javafx-graphics:12:${os}"
-    compile "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "com.github.ajalt.clikt:clikt:3.3.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+}
+
+javafx {
+    version = "17.0.1"
+    modules = [
+        "javafx.base",
+        "javafx.controls",
+        "javafx.fxml",
+        "javafx.graphics",
+    ]
 }
 
 compileKotlin {

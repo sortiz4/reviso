@@ -48,7 +48,7 @@ object Preview {
     }
 
     /**
-     * Uncapitalizes every letter in the file name.
+     * Decapitalizes every letter in the file name.
      */
     fun lower(file: File): File {
         val name = file.name.toLowerCase()
