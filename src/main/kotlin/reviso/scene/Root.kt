@@ -55,7 +55,7 @@ class Root : Initializable {
         val window = DirectoryChooser()
         if (directory != null) {
             // Start from the current directory
-            window.initialDirectory = File(directory)
+            window.initialDirectory = File(directory!!)
         }
         val result = window.showDialog((event.target as Node).scene.window)
         if (result != null) {
@@ -174,7 +174,7 @@ class Root : Initializable {
     private fun fileTree(recursive: Boolean): Sequence<File> {
         if (directory != null) {
             // Collect the file tree as a sequence
-            val file = File(directory)
+            val file = File(directory!!)
             val tree = when(recursive) {
                 true -> file.walk()
                 false -> file.walk().maxDepth(1)

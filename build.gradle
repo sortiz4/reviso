@@ -1,17 +1,8 @@
 plugins {
+    id "application"
     id "org.jetbrains.kotlin.jvm" version "1.5.31"
     id "org.openjfx.javafxplugin" version "0.0.10"
 }
-
-group "reviso"
-version "2.0"
-
-apply plugin: "kotlin"
-apply plugin: "application"
-
-mainClassName = "${group}.Main"
-sourceCompatibility = 1.8
-targetCompatibility = sourceCompatibility
 
 repositories {
     mavenCentral()
@@ -20,6 +11,25 @@ repositories {
 dependencies {
     implementation "com.github.ajalt.clikt:clikt:3.3.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+}
+
+group = "reviso"
+version = "2.0"
+
+application {
+    mainModule = "${group}"
+    mainClass = "${mainModule}.Main"
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "12"
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_12
+    targetCompatibility = JavaVersion.VERSION_12
 }
 
 javafx {
@@ -32,10 +42,6 @@ javafx {
     ]
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = targetCompatibility
-}
-
-compileTestKotlin {
-    kotlinOptions.jvmTarget = targetCompatibility
+startScripts {
+    enabled = false
 }
