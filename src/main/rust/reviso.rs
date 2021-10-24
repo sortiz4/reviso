@@ -23,19 +23,26 @@ fn main() {
     };
 
     // Construct the arguments
-    let arguments = &[
+    let default_arguments = &[
         "--module-path", module_path.to_str().unwrap(),
         "--add-modules", "javafx.controls,javafx.fxml",
         "-classpath", &class_path,
         "reviso.Main",
+        "--",
     ];
+    let final_arguments = {
+        default_arguments
+            .iter()
+            .map(|string| string.to_string())
+            .chain(env::args().skip(1).map(|string| string.to_string()))
+    };
 
     // Spawn the Java process
     Command::new(if cfg![target_os = "windows"] { "javaw" } else { "java" })
         .stdin(Stdio::inherit())
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
-        .args(arguments)
+        .args(final_arguments)
         .spawn()
         .unwrap();
 }

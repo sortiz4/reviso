@@ -45,3 +45,16 @@ javafx {
 startScripts {
     enabled = false
 }
+
+task setup {
+    doLast {
+        exec {
+            executable "python3"
+            args "setup.py", "--bin", "--icons"
+        }
+    }
+}
+
+build {
+    dependsOn setup
+}

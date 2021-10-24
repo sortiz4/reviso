@@ -1,10 +1,8 @@
-*.ico
-*.iml
-*.png
 /.gradle
 /.idea
 /build
 /gradle
 /gradlew
 /gradlew.bat
-/out
+/src/dist
+/src/main/resources/reviso/icon
