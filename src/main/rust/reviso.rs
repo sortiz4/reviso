@@ -1,7 +1,6 @@
 use std::env;
 use std::fs;
 use std::process::Command;
-use std::process::Stdio;
 
 fn main() {
     // Get the module path
@@ -28,9 +27,8 @@ fn main() {
         "--add-modules", "javafx.controls,javafx.fxml",
         "-classpath", &class_path,
         "reviso.Main",
-        "--",
     ];
-    let final_arguments = {
+    let merged_arguments = {
         default_arguments
             .iter()
             .map(|string| string.to_string())
@@ -39,10 +37,7 @@ fn main() {
 
     // Spawn the Java process
     Command::new(if cfg![target_os = "windows"] { "javaw" } else { "java" })
-        .stdin(Stdio::inherit())
-        .stdout(Stdio::inherit())
-        .stderr(Stdio::inherit())
-        .args(final_arguments)
-        .spawn()
+        .args(merged_arguments)
+        .status()
         .unwrap();
 }

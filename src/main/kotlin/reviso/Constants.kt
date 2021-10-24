@@ -3,6 +3,7 @@ package reviso
 object Constants {
     // Text and dialog
     const val TITLE = "Reviso"
+    const val VERSION = "2.0"
 
     // Assets and resources
     private const val ICON_16 = "reviso/icon/16"
@@ -10,14 +11,14 @@ object Constants {
     private const val ICON_64 = "reviso/icon/64"
     private const val ICON_128 = "reviso/icon/128"
     private const val ICON_256 = "reviso/icon/256"
+    const val SCENE_ROOT = "reviso/scene/Root"
     val ICON_SET = arrayOf(
         ICON_16,
         ICON_32,
         ICON_64,
         ICON_128,
-        ICON_256
+        ICON_256,
     )
-    const val SCENE_ROOT = "reviso/scene/Root"
 
     // Standard transformations
     const val CHOICE_UPPER = "Uppercase"
@@ -30,7 +31,7 @@ object Constants {
         CHOICE_UPPER,
         CHOICE_SENTENCE,
         CHOICE_TITLE_AP,
-        CHOICE_TITLE_SIMPLE
+        CHOICE_TITLE_SIMPLE,
     )
 
     fun open(message: String): String {

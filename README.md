@@ -10,19 +10,17 @@ for many years.
 
 ## Requirements
 - Linux, MacOS, or Windows
-- Java 8+
+- Java 12
 
 ## Compilation
 In addition to the requirements above, those seeking to compile must have...
 
-- Java SDK 11+
-- Gradle 5.2+
-- Python 3.5+
+- Java SDK 16
+- Gradle 7.2
+- Python 3.8
 
 Once these requirements have been met, simply clone the repository and execute
-`py setup.py -i` (this will download the required icons). Once completed, the
-application can be compiled by executing `gradle build`. A distribution will
-be created under `./build/distributions/`.
+`gradle build`. A distribution will be created under `./build/distributions/`.
 
 ## Usage
 Before starting, you must enter the directory containing the files you would

@@ -4,6 +4,7 @@ import java.io.IOException as IoException
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.stage.Stage
+import kotlin.system.exitProcess
 
 class Main : Application() {
     @Throws(IoException::class)
@@ -23,7 +24,12 @@ class Main : Application() {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            launch(Main::class.java, *args)
+            if (args.isEmpty()) {
+                launch(Main::class.java, *args)
+            } else {
+                Cli().main(args)
+            }
+            exitProcess(0)
         }
     }
 }

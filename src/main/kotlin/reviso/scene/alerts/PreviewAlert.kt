@@ -1,36 +1,11 @@
-package reviso.scene
+package reviso.scene.alerts
 
 import java.io.File
 import javafx.geometry.Insets
-import javafx.scene.control.Alert as BaseAlert
-import javafx.scene.control.ButtonType
 import javafx.scene.control.TextArea
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.text.Font
-import javafx.stage.Stage
-import reviso.Constants
-import reviso.Resource
-
-open class Alert(type: AlertType) : BaseAlert(type) {
-    init {
-        val stage = dialogPane.scene.window as Stage
-        stage.icons.addAll(Resource.png(Constants.ICON_SET))
-        buttonTypes[0] = ButtonType("Ok")
-    }
-}
-
-open class DirectoryAlert(message: String) : Alert(AlertType.ERROR) {
-    init {
-        title = "Error"
-        headerText = message
-        contentText = "Please open a directory to begin."
-    }
-}
-
-class InvalidDirectoryAlert(path: String) : DirectoryAlert("'$path' is not a directory.")
-
-class NoDirectoryAlert : DirectoryAlert("No directory was found.")
 
 class PreviewAlert(files: List<Pair<File, File>>) : Alert(AlertType.CONFIRMATION) {
     init {
@@ -64,18 +39,6 @@ class PreviewAlert(files: List<Pair<File, File>>) : Alert(AlertType.CONFIRMATION
             val box = HBox(text)
             box.padding = Insets(inset, inset, 0.0, inset)
             dialogPane.content = box
-        }
-    }
-}
-
-class ResultAlert(count: Int) : Alert(AlertType.INFORMATION) {
-    init {
-        title = "Result"
-        headerText = "Rename complete."
-        contentText = if (count > 0) {
-            "$count file(s) renamed."
-        } else {
-            "Nothing was renamed."
         }
     }
 }

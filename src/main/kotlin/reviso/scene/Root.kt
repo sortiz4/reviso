@@ -21,6 +21,10 @@ import javafx.stage.DirectoryChooser
 import kotlin.collections.ArrayList
 import reviso.Constants
 import reviso.Preview
+import reviso.scene.alerts.InvalidDirectoryAlert
+import reviso.scene.alerts.NoDirectoryAlert
+import reviso.scene.alerts.PreviewAlert
+import reviso.scene.alerts.ResultAlert
 
 class Root : Initializable {
     private class NoDirectoryException : IoException()
