@@ -4,6 +4,9 @@ plugins {
     id "org.openjfx.javafxplugin" version "0.0.10"
 }
 
+group = "reviso"
+version = "2.0"
+
 repositories {
     mavenCentral()
 }
@@ -13,12 +16,31 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
 }
 
-group = "reviso"
-version = "2.0"
+task setup {
+    ext {
+        getPython = { ->
+            if (!org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+                return "python3"
+            }
+            return "python"
+        }
+    }
+
+    doLast {
+        exec {
+            executable getPython()
+            args "setup.py", "--icons", "--wrapper"
+        }
+    }
+}
 
 application {
     mainModule = "${group}"
     mainClass = "${mainModule}.Main"
+}
+
+build {
+    dependsOn setup
 }
 
 compileKotlin {
@@ -28,7 +50,6 @@ compileKotlin {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_12
     targetCompatibility = JavaVersion.VERSION_12
 }
 
@@ -44,17 +65,4 @@ javafx {
 
 startScripts {
     enabled = false
-}
-
-task setup {
-    doLast {
-        exec {
-            executable "python3"
-            args "setup.py", "--bin", "--icons"
-        }
-    }
-}
-
-build {
-    dependsOn setup
 }
