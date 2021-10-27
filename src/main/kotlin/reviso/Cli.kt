@@ -11,7 +11,7 @@ import com.github.ajalt.clikt.parameters.options.versionOption
 import com.github.ajalt.clikt.parameters.types.path
 import java.nio.file.Path
 
-class Cli : Clikt(name = Constants.TITLE.toLowerCase()) {
+class Cli : Clikt(name = Constants.TITLE.toLocaleLowerCase()) {
     private val paths: Set<Path> by argument().path(canBeFile = false, mustExist = true).multiple().unique()
     private val mode: String by option(*MODE_NAMES, help = MODE_HELP).default("")
     private val search: String by option(*SEARCH_NAMES, help = SEARCH_HELP).default("")
@@ -29,6 +29,7 @@ class Cli : Clikt(name = Constants.TITLE.toLowerCase()) {
     }
 
     companion object {
+        // Option names
         private val MODE_NAMES = arrayOf("--mode", "-m")
         private val SEARCH_NAMES = arrayOf("--search", "-s")
         private val REPLACE_NAMES = arrayOf("--replace", "-r")
@@ -37,6 +38,8 @@ class Cli : Clikt(name = Constants.TITLE.toLowerCase()) {
         private val RECURSIVE_NAMES = arrayOf("--recursive", "-R")
         private val LAUNCH_NAMES = arrayOf("--launch", "-l")
         private val VERSION_NAMES = setOf("--version", "-v")
+
+        // Help messages
         private const val MODE_HELP = "The standard mode to use. Disables search and replace."
         private const val SEARCH_HELP = "Text to search for. Disables mode selection."
         private const val REPLACE_HELP = "Text to replace the search text with. Disables mode selection."

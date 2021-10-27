@@ -7,7 +7,7 @@ import kotlin.collections.HashSet
 
 object Preview {
     /**
-     * Words in AP titles that should be uncapitalized.
+     * Words in AP titles that should not be capitalized.
      */
     private val AP_WORDS = HashSet(
         arrayListOf(
@@ -27,7 +27,7 @@ object Preview {
             "the",
             "to",
             "up",
-            "yet"
+            "yet",
         )
     )
 
@@ -51,7 +51,7 @@ object Preview {
      * Decapitalizes every letter in the file name.
      */
     fun lower(file: File): File {
-        val name = file.name.toLowerCase()
+        val name = file.name.toLocaleLowerCase()
         return file(file.parent, name)
     }
 
@@ -59,7 +59,7 @@ object Preview {
      * Capitalizes every letter in the file name.
      */
     fun upper(file: File): File {
-        val name = file.name.toUpperCase()
+        val name = file.name.toLocaleUpperCase()
         return file(file.parent, name)
     }
 
@@ -67,7 +67,7 @@ object Preview {
      * Capitalizes the first letter of the file name.
      */
     fun sentence(file: File): File {
-        val name = file.name.toLowerCase().capitalize()
+        val name = file.name.toLocaleLowerCase().localeCapitalize()
         return file(file.parent, name)
     }
 
@@ -77,12 +77,12 @@ object Preview {
     fun titleAp(file: File): File {
         val words = file.name.split(' ') as ArrayList
         for (i in 0 until words.size) {
-            words[i] = words[i].toLowerCase()
+            words[i] = words[i].toLocaleLowerCase()
             if (i == 0 || i == words.size - 1) {
-                words[i] = words[i].capitalize()
+                words[i] = words[i].localeCapitalize()
             } else {
                 if (words[i] !in AP_WORDS) {
-                    words[i] = words[i].capitalize()
+                    words[i] = words[i].localeCapitalize()
                 }
             }
         }
@@ -94,7 +94,7 @@ object Preview {
      * Capitalizes the first letter of every word in the file name (simple).
      */
     fun titleSimple(file: File): File {
-        val name = file.name.split(' ').joinToString(" ") { s -> s.toLowerCase().capitalize() }
+        val name = file.name.split(' ').joinToString(" ") { s -> s.toLocaleLowerCase().localeCapitalize() }
         return file(file.parent, name)
     }
 

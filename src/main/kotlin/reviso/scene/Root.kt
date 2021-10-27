@@ -115,7 +115,7 @@ class Root : Initializable {
 
     @Fxml
     fun onKeyRelease(event: KeyEvent) {
-        if (event.code == KeyCode.ENTER){
+        if (event.code == KeyCode.ENTER) {
             onOpen()
         }
     }
