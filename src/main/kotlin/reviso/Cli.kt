@@ -11,9 +11,9 @@ import com.github.ajalt.clikt.parameters.options.versionOption
 import com.github.ajalt.clikt.parameters.types.path
 import java.nio.file.Path
 
-class Cli : Clikt(name = Constants.TITLE.toLocaleLowerCase()) {
+class Cli(private val start: () -> Unit) : Clikt(name = Constants.name()) {
     private val paths: Set<Path> by argument().path(canBeFile = false, mustExist = true).multiple().unique()
-    private val mode: String by option(*MODE_NAMES, help = MODE_HELP).default("")
+    private val method: String by option(*METHOD_NAMES, help = METHOD_HELP).default("")
     private val search: String by option(*SEARCH_NAMES, help = SEARCH_HELP).default("")
     private val replace: String by option(*REPLACE_NAMES, help = REPLACE_HELP).default("")
     private val regex: Boolean by option(*REGEX_NAMES, help = REGEX_HELP).flag(default = false)
@@ -26,23 +26,30 @@ class Cli : Clikt(name = Constants.TITLE.toLocaleLowerCase()) {
     }
 
     override fun run() {
-        val reviso = (
-            Reviso()
-                .setPaths(paths)
-                .setMode(mode)
-                .setSearch(search)
-                .setReplace(replace)
-                .setRegex(regex)
-                .setRecursive(recursive)
-        )
-        if (preview) {
-            println(reviso.preview().joinToString("\n"))
+        when (launch) {
+            true -> {
+                start()
+            }
+            false -> {
+                val reviso = (
+                    Reviso()
+                        .setPaths(paths)
+                        .setMethod(method)
+                        .setSearch(search)
+                        .setReplace(replace)
+                        .setRegex(regex)
+                        .setRecursive(recursive)
+                )
+                if (preview) {
+                    println(reviso.preview().joinToString("\n"))
+                }
+            }
         }
     }
 
     companion object {
         // Option names
-        private val MODE_NAMES = arrayOf("--mode", "-m")
+        private val METHOD_NAMES = arrayOf("--method", "-m")
         private val SEARCH_NAMES = arrayOf("--search", "-s")
         private val REPLACE_NAMES = arrayOf("--replace", "-r")
         private val REGEX_NAMES = arrayOf("--regex", "-E")
@@ -52,9 +59,9 @@ class Cli : Clikt(name = Constants.TITLE.toLocaleLowerCase()) {
         private val VERSION_NAMES = setOf("--version", "-v")
 
         // Help messages
-        private const val MODE_HELP = "The standard mode to use. Disables search and replace."
-        private const val SEARCH_HELP = "Text to search for. Disables mode selection."
-        private const val REPLACE_HELP = "Text to replace the search text with. Disables mode selection."
+        private const val METHOD_HELP = "The standard method to use. Disables search and replace."
+        private const val SEARCH_HELP = "Text to search for. Disables method selection."
+        private const val REPLACE_HELP = "Text to replace the search text with. Disables method selection."
         private const val REGEX_HELP = "Interpret the search and replace text as a regular expression."
         private const val PREVIEW_HELP = "Preview the changes."
         private const val RECURSIVE_HELP = "Descend into directories."

@@ -5,8 +5,8 @@ import java.nio.file.Path
 import java.util.regex.Pattern
 
 class Reviso {
-    private var paths: Set<Path> = setOf()
-    private var mode: String = ""
+    private var paths: Set<Path> = emptySet()
+    private var method: String = ""
     private var search: String = ""
     private var replace: String = ""
     private var regex: Boolean = false
@@ -14,7 +14,7 @@ class Reviso {
 
     fun preview(): List<String> {
         // Constructs a formatted preview (pads the first column to enhance readability)
-        val mappings = collectFilePairs().map { (old, new) -> Pair("${getRelative(old)}", "${getRelative(new)}") }
+        val mappings = collectFilePairs().map { (old, new) -> Pair("${relative(old)}", "${relative(new)}") }
         val padding = mappings.maxByOrNull { (old, _) -> old.length }?.first?.length ?: 0
         return mappings.map { (old, new) -> "${old.padEnd(padding)} -> $new" }
     }
@@ -32,8 +32,8 @@ class Reviso {
         return this
     }
 
-    fun setMode(value: String): Reviso {
-        mode = value
+    fun setMethod(value: String): Reviso {
+        method = value
         return this
     }
 
@@ -70,7 +70,7 @@ class Reviso {
                         false -> renameWithString(source, search, replace)
                     }
                 } else {
-                    when (mode) {
+                    when (method) {
                         Constants.CHOICE_LOWER -> renameToLower(source)
                         Constants.CHOICE_UPPER -> renameToUpper(source)
                         Constants.CHOICE_SENTENCE -> renameToSentence(source)
@@ -91,7 +91,7 @@ class Reviso {
     }
 
     private fun collectFiles(): Sequence<File> {
-        return paths.map { collectFiles(File("$it").absolutePath) }.fold(sequenceOf()) { seq, tree -> seq + tree }
+        return paths.map { collectFiles(File("$it").absolutePath) }.fold(emptySequence()) { seq, tree -> seq + tree }
     }
 
     private fun collectFiles(path: File): Sequence<File> {
@@ -105,16 +105,16 @@ class Reviso {
         return collectFiles(File(path))
     }
 
-    private fun getRelative(file: File): File {
-        return file.relativeTo(File(File("").absolutePath))
-    }
-
     private fun isSearchAndReplace(): Boolean {
         return !this.isStandard()
     }
 
     private fun isStandard(): Boolean {
-        return mode.isNotEmpty()
+        return method.isNotEmpty()
+    }
+
+    private fun relative(file: File): File {
+        return file.relativeTo(File(File("").absolutePath))
     }
 
     /**

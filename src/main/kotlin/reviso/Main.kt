@@ -1,17 +1,15 @@
 package reviso
 
-import java.io.IOException as IoException
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.stage.Stage
 import kotlin.system.exitProcess
 
 class Main : Application() {
-    @Throws(IoException::class)
     override fun start(stage: Stage) {
         // Load the scene and set the title
-        stage.icons.addAll(Resource.png(Constants.ICON_SET))
-        stage.scene = Scene(Resource.fxml(Constants.SCENE_ROOT))
+        stage.icons.addAll(Constants.icons())
+        stage.scene = Scene(Constants.scene())
         stage.title = Constants.TITLE
         stage.show()
 
@@ -24,11 +22,7 @@ class Main : Application() {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            if (args.isEmpty()) {
-                launch(Main::class.java, *args)
-            } else {
-                Cli().main(args)
-            }
+            Cli { launch(Main::class.java, *args) }.main(args)
             exitProcess(0)
         }
     }

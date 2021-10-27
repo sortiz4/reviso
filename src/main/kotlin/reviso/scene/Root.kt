@@ -123,7 +123,7 @@ class Root : Initializable {
     fun onPreviewSearch() {
         if (fxSearch.text.isNotEmpty()) {
             onAction {
-                PreviewAlert(onStart().setRecursive(fxRecursiveSearch.isSelected).preview()).showAndWait()
+                PreviewAlert(onSearch().preview()).showAndWait()
             }
         }
     }
@@ -132,7 +132,7 @@ class Root : Initializable {
     fun onExecuteSearch() {
         if (fxSearch.text.isNotEmpty()) {
             onAction {
-                ResultAlert(onStart().setRecursive(fxRecursiveSearch.isSelected).rename()).showAndWait()
+                ResultAlert(onSearch().rename()).showAndWait()
             }
         }
     }
@@ -140,14 +140,14 @@ class Root : Initializable {
     @Fxml
     fun onPreviewStandard() {
         onAction {
-            PreviewAlert(onStart().setRecursive(fxRecursiveStandard.isSelected).preview()).showAndWait()
+            PreviewAlert(onStandard().preview()).showAndWait()
         }
     }
 
     @Fxml
     fun onExecuteStandard() {
         onAction {
-            ResultAlert(onStart().setRecursive(fxRecursiveStandard.isSelected).rename()).showAndWait()
+            ResultAlert(onStandard().rename()).showAndWait()
         }
     }
 
@@ -165,14 +165,23 @@ class Root : Initializable {
         }
     }
 
-    private fun onStart(): Reviso {
+    private fun onSearch(): Reviso {
         return (
             Reviso()
                 .setPaths(setOf(Paths.get(directory!!)))
-                .setMode(fxChoices.selectionModel.selectedItem)
                 .setSearch(fxSearch.text)
                 .setReplace(fxReplace.text)
                 .setRegex(fxRegexSearch.isSelected)
+                .setRecursive(fxRecursiveSearch.isSelected)
+        )
+    }
+
+    private fun onStandard(): Reviso {
+        return (
+            Reviso()
+                .setPaths(setOf(Paths.get(directory!!)))
+                .setMethod(fxChoices.selectionModel.selectedItem)
+                .setRecursive(fxRecursiveStandard.isSelected)
         )
     }
 }

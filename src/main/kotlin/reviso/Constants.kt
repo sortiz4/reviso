@@ -1,28 +1,18 @@
 package reviso
 
+import java.net.URL as Url
+import javafx.fxml.FXMLLoader as FxmlLoader
+import javafx.scene.Parent
+import javafx.scene.image.Image
+
 object Constants {
     // Text and dialog
     const val TITLE = "Reviso"
     const val VERSION = "2.0"
 
-    // Assets and resources
-    private const val ICON_16 = "reviso/icon/16"
-    private const val ICON_32 = "reviso/icon/32"
-    private const val ICON_64 = "reviso/icon/64"
-    private const val ICON_128 = "reviso/icon/128"
-    private const val ICON_256 = "reviso/icon/256"
-    const val SCENE_ROOT = "reviso/scene/Root"
-    val ICON_SET = arrayOf(
-        ICON_16,
-        ICON_32,
-        ICON_64,
-        ICON_128,
-        ICON_256,
-    )
-
     // Standard transformations
-    const val CHOICE_UPPER = "Uppercase"
     const val CHOICE_LOWER = "Lowercase"
+    const val CHOICE_UPPER = "Uppercase"
     const val CHOICE_SENTENCE = "Sentence"
     const val CHOICE_TITLE_AP = "Title (AP)"
     const val CHOICE_TITLE_SIMPLE = "Title (simple)"
@@ -34,7 +24,30 @@ object Constants {
         CHOICE_TITLE_SIMPLE,
     )
 
+    fun icons(): Array<Image> {
+        val icons = arrayOf(
+            "reviso/icon/16.png",
+            "reviso/icon/32.png",
+            "reviso/icon/64.png",
+            "reviso/icon/128.png",
+            "reviso/icon/256.png",
+        )
+        return icons.map { Image(resource(it)?.openStream(), 0.0, 0.0, true, true) }.toTypedArray()
+    }
+
+    fun name(): String {
+        return TITLE.toLocaleLowerCase()
+    }
+
     fun open(message: String): String {
         return "Open: $message"
+    }
+
+    fun scene(): Parent {
+        return FxmlLoader.load(resource("reviso/scene/Root.fxml"))
+    }
+
+    private fun resource(path: String): Url? {
+        return Constants::class.java.classLoader.getResource(path)
     }
 }
