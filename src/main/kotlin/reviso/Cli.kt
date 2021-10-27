@@ -26,6 +26,18 @@ class Cli : Clikt(name = Constants.TITLE.toLocaleLowerCase()) {
     }
 
     override fun run() {
+        val reviso = (
+            Reviso()
+                .setPaths(paths)
+                .setMode(mode)
+                .setSearch(search)
+                .setReplace(replace)
+                .setRegex(regex)
+                .setRecursive(recursive)
+        )
+        if (preview) {
+            println(reviso.preview().joinToString("\n"))
+        }
     }
 
     companion object {

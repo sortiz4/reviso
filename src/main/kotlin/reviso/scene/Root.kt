@@ -3,8 +3,8 @@ package reviso.scene
 import java.io.File
 import java.io.IOException as IoException
 import java.net.URL as Url
+import java.nio.file.Paths
 import java.util.ResourceBundle
-import java.util.regex.Pattern
 import javafx.event.ActionEvent
 import javafx.fxml.FXML as Fxml
 import javafx.fxml.Initializable
@@ -18,9 +18,8 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.TransferMode
 import javafx.stage.DirectoryChooser
-import kotlin.collections.ArrayList
 import reviso.Constants
-import reviso.Preview
+import reviso.Reviso
 import reviso.scene.alerts.InvalidDirectoryAlert
 import reviso.scene.alerts.NoDirectoryAlert
 import reviso.scene.alerts.PreviewAlert
@@ -124,7 +123,7 @@ class Root : Initializable {
     fun onPreviewSearch() {
         if (fxSearch.text.isNotEmpty()) {
             onAction {
-                PreviewAlert(search()).showAndWait()
+                PreviewAlert(onStart().setRecursive(fxRecursiveSearch.isSelected).preview()).showAndWait()
             }
         }
     }
@@ -133,11 +132,7 @@ class Root : Initializable {
     fun onExecuteSearch() {
         if (fxSearch.text.isNotEmpty()) {
             onAction {
-                val pairs = search()
-                for ((source, target) in pairs) {
-                    source.renameTo(target)
-                }
-                ResultAlert(pairs.size).showAndWait()
+                ResultAlert(onStart().setRecursive(fxRecursiveSearch.isSelected).rename()).showAndWait()
             }
         }
     }
@@ -145,18 +140,14 @@ class Root : Initializable {
     @Fxml
     fun onPreviewStandard() {
         onAction {
-            PreviewAlert(standard()).showAndWait()
+            PreviewAlert(onStart().setRecursive(fxRecursiveStandard.isSelected).preview()).showAndWait()
         }
     }
 
     @Fxml
     fun onExecuteStandard() {
         onAction {
-            val pairs = standard()
-            for ((source, target) in pairs) {
-                source.renameTo(target)
-            }
-            ResultAlert(pairs.size).showAndWait()
+            ResultAlert(onStart().setRecursive(fxRecursiveStandard.isSelected).rename()).showAndWait()
         }
     }
 
@@ -174,71 +165,14 @@ class Root : Initializable {
         }
     }
 
-    @Throws(NoDirectoryException::class)
-    private fun fileTree(recursive: Boolean): Sequence<File> {
-        if (directory != null) {
-            // Collect the file tree as a sequence
-            val file = File(directory!!)
-            val tree = when(recursive) {
-                true -> file.walk()
-                false -> file.walk().maxDepth(1)
-            }
-            return tree.filter { node -> node.isFile }
-        }
-        throw NoDirectoryException()
-    }
-
-    @Throws(NoDirectoryException::class)
-    private fun search(): List<Pair<File, File>> {
-        val pairs = ArrayList<Pair<File, File>>()
-        val search = fxSearch.text
-        val replace = fxReplace.text
-        val pattern = when(fxRegexSearch.isSelected) {
-            true -> Pattern.compile(search)
-            false -> null
-        }
-
-        // Collect a preview of each renamed file
-        for (source in fileTree(fxRecursiveSearch.isSelected)) {
-            val target = try {
-                when(fxRegexSearch.isSelected) {
-                    true -> Preview.regex(source, pattern!!, replace)
-                    false -> Preview.simple(source, search, replace)
-                }
-            } catch (_: IllegalArgumentException) {
-                continue
-            }
-            if (source.name != target.name) {
-                // Ignore unchanged file names
-                pairs.add(Pair(source, target))
-            }
-        }
-        return pairs
-    }
-
-    @Throws(NoDirectoryException::class)
-    private fun standard(): List<Pair<File, File>> {
-        val pairs = ArrayList<Pair<File, File>>()
-
-        // Collect a preview of each renamed file
-        for (source in fileTree(fxRecursiveStandard.isSelected)) {
-            val target = try {
-                when (fxChoices.selectionModel.selectedItem) {
-                    Constants.CHOICE_LOWER -> Preview.lower(source)
-                    Constants.CHOICE_UPPER -> Preview.upper(source)
-                    Constants.CHOICE_SENTENCE -> Preview.sentence(source)
-                    Constants.CHOICE_TITLE_AP -> Preview.titleAp(source)
-                    Constants.CHOICE_TITLE_SIMPLE -> Preview.titleSimple(source)
-                    else -> throw RuntimeException() // Unreachable
-                }
-            } catch (_: IllegalArgumentException) {
-                continue
-            }
-            if (source.name != target.name) {
-                // Ignore unchanged file names
-                pairs.add(Pair(source, target))
-            }
-        }
-        return pairs
+    private fun onStart(): Reviso {
+        return (
+            Reviso()
+                .setPaths(setOf(Paths.get(directory!!)))
+                .setMode(fxChoices.selectionModel.selectedItem)
+                .setSearch(fxSearch.text)
+                .setReplace(fxReplace.text)
+                .setRegex(fxRegexSearch.isSelected)
+        )
     }
 }
