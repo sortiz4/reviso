@@ -1,6 +1,6 @@
 package reviso
 
-enum class Method(private val tag: String, private val choice: String) {
+enum class Method(private val cliName: String, private val guiName: String) {
     Lower(
         "lowercase",
         "Lowercase",
@@ -23,12 +23,16 @@ enum class Method(private val tag: String, private val choice: String) {
     );
 
     companion object {
-        fun choices(): Array<String> {
-            return values().map { it.choice }.toTypedArray()
+        fun cliNames(): Array<String> {
+            return values().map { it.cliName }.toTypedArray()
+        }
+
+        fun guiNames(): Array<String> {
+            return values().map { it.guiName }.toTypedArray()
         }
 
         fun from(value: String): Method? {
-            return values().find { it.choice == value || it.tag == value }
+            return values().find { it.cliName == value || it.guiName == value }
         }
     }
 }

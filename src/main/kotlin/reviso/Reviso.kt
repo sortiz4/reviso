@@ -9,8 +9,8 @@ class Reviso {
     private var method: Method? = null
     private var search: String? = null
     private var replace: String? = null
-    private var regex: Boolean = false
-    private var recursive: Boolean = false
+    private var isRecursive: Boolean = false
+    private var isExpression: Boolean = false
 
     fun preview(relative: Boolean): Collection<String> {
         fun transform(file: File): File {
@@ -27,36 +27,36 @@ class Reviso {
     }
 
     fun rename(): Int {
-        return collectFileChanges().onEach { it.first.renameTo(it.second) }.count()
+        return collectFileChanges().onEach { (source, target) -> source.renameTo(target) }.count()
     }
 
-    fun setPaths(value: Set<Path>): Reviso {
+    fun paths(value: Set<Path>): Reviso {
         paths = value
         return this
     }
 
-    fun setMethod(value: String): Reviso {
+    fun method(value: String): Reviso {
         method = Method.from(value)
         return this
     }
 
-    fun setSearch(value: String): Reviso {
+    fun search(value: String): Reviso {
         search = value
         return this
     }
 
-    fun setReplace(value: String): Reviso {
+    fun replace(value: String): Reviso {
         replace = value
         return this
     }
 
-    fun setRegex(value: Boolean): Reviso {
-        regex = value
+    fun isRecursive(value: Boolean): Reviso {
+        isRecursive = value
         return this
     }
 
-    fun setRecursive(value: Boolean): Reviso {
-        recursive = value
+    fun isExpression(value: Boolean): Reviso {
+        isExpression = value
         return this
     }
 
@@ -71,9 +71,9 @@ class Reviso {
         fun transform(source: File): Pair<File, File>? {
             val target = try {
                 when {
-                    isSearch -> when (regex) {
+                    isSearch -> when (isExpression) {
                         true -> renameWithPattern(source, pattern, replace)
-                        false -> renameWithString(source, search, replace)
+                        false -> renameWithSimple(source, search, replace)
                     }
                     isStandard -> when (method) {
                         Method.Lower -> renameToLower(source)
@@ -106,7 +106,7 @@ class Reviso {
     }
 
     private fun collectFiles(path: File): Sequence<File> {
-        return when (recursive) {
+        return when (isRecursive) {
             true -> path.walkBottomUp()
             false -> path.walkBottomUp().maxDepth(1)
         }
@@ -187,7 +187,7 @@ class Reviso {
         }
 
         /**
-         * Replaces all matches in the file name (regex).
+         * Replaces all matches in the file name (pattern).
          */
         private fun renameWithPattern(file: File, search: Pattern, replace: String): File {
             return createFile(file.parent, search.matcher(file.name).replaceAll(replace))
@@ -196,7 +196,7 @@ class Reviso {
         /**
          * Replaces all matches in the file name (simple).
          */
-        private fun renameWithString(file: File, search: String, replace: String): File {
+        private fun renameWithSimple(file: File, search: String, replace: String): File {
             return createFile(file.parent, file.name.replace(search, replace))
         }
 

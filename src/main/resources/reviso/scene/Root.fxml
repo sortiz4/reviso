@@ -39,7 +39,7 @@
             <TextField fx:id="fxSearch" promptText="Search for..." />
             <TextField fx:id="fxReplace" promptText="Replace with..." />
             <HBox alignment="CENTER_RIGHT" spacing="5.0">
-                <CheckBox fx:id="fxRegexSearch" text="Regex" />
+                <CheckBox fx:id="fxExpressionSearch" text="Expression" />
                 <CheckBox fx:id="fxRecursiveSearch" text="Recursive" />
                 <Button onAction="#onPreviewSearch" text="Preview" />
                 <Button onAction="#onExecuteSearch" text="Rename" />

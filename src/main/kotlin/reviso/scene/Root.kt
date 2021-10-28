@@ -41,7 +41,7 @@ class Root : Initializable {
     @Fxml
     private lateinit var fxReplace: TextField
     @Fxml
-    private lateinit var fxRegexSearch: CheckBox
+    private lateinit var fxExpressionSearch: CheckBox
     @Fxml
     private lateinit var fxRecursiveSearch: CheckBox
 
@@ -154,7 +154,7 @@ class Root : Initializable {
 
     override fun initialize(resource: Url?, bundle: ResourceBundle?) {
         // Populate the list of choices
-        fxChoices.items.addAll(*Method.choices())
+        fxChoices.items.addAll(*Method.guiNames())
         fxChoices.selectionModel.selectFirst()
     }
 
@@ -169,20 +169,20 @@ class Root : Initializable {
     private fun onSearch(): Reviso {
         return (
             Reviso()
-                .setPaths(setOf(Paths.get(directory!!)))
-                .setSearch(fxSearch.text)
-                .setReplace(fxReplace.text)
-                .setRegex(fxRegexSearch.isSelected)
-                .setRecursive(fxRecursiveSearch.isSelected)
+                .paths(setOf(Paths.get(directory!!)))
+                .search(fxSearch.text)
+                .replace(fxReplace.text)
+                .isRecursive(fxRecursiveSearch.isSelected)
+                .isExpression(fxExpressionSearch.isSelected)
         )
     }
 
     private fun onStandard(): Reviso {
         return (
             Reviso()
-                .setPaths(setOf(Paths.get(directory!!)))
-                .setMethod(fxChoices.selectionModel.selectedItem)
-                .setRecursive(fxRecursiveStandard.isSelected)
+                .paths(setOf(Paths.get(directory!!)))
+                .method(fxChoices.selectionModel.selectedItem)
+                .isRecursive(fxRecursiveStandard.isSelected)
         )
     }
 }
