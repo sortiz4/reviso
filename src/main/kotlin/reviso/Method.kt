@@ -1,34 +1,34 @@
 package reviso
 
-enum class Method(private val long: String, private val short: String) {
+enum class Method(private val tag: String, private val choice: String) {
     Lower(
-        "Lowercase",
         "lowercase",
+        "Lowercase",
     ),
     Upper(
-        "Uppercase",
         "uppercase",
+        "Uppercase",
     ),
     Sentence(
-        "Sentence",
         "sentence",
+        "Sentence",
     ),
     TitleAp(
-        "Title (AP)",
         "title-ap",
+        "Title (AP)",
     ),
     TitleSimple(
-        "Title (Simple)",
         "title-simple",
+        "Title (Simple)",
     );
 
     companion object {
         fun choices(): Array<String> {
-            return values().map { it.long }.toTypedArray()
+            return values().map { it.choice }.toTypedArray()
         }
 
-        fun from(choice: String): Method? {
-            return values().find { it.long == choice || it.short == choice }
+        fun from(value: String): Method? {
+            return values().find { it.choice == value || it.tag == value }
         }
     }
 }

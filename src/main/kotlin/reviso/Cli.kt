@@ -41,7 +41,7 @@ class Cli(private val start: () -> Unit) : Clikt(name = Constants.name()) {
                         .setRecursive(recursive)
                 )
                 if (preview) {
-                    println(reviso.preview().joinToString("\n"))
+                    reviso.preview(relative = true).forEach { echo(it) }
                 }
             }
         }

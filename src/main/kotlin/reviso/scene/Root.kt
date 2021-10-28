@@ -124,7 +124,7 @@ class Root : Initializable {
     fun onPreviewSearch() {
         if (fxSearch.text.isNotEmpty()) {
             onAction {
-                PreviewAlert(onSearch().preview()).showAndWait()
+                PreviewAlert(onSearch().preview(relative = false)).showAndWait()
             }
         }
     }
@@ -141,7 +141,7 @@ class Root : Initializable {
     @Fxml
     fun onPreviewStandard() {
         onAction {
-            PreviewAlert(onStandard().preview()).showAndWait()
+            PreviewAlert(onStandard().preview(relative = false)).showAndWait()
         }
     }
 

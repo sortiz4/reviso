@@ -12,19 +12,22 @@ class Reviso {
     private var regex: Boolean = false
     private var recursive: Boolean = false
 
-    fun preview(): List<String> {
+    fun preview(relative: Boolean): Collection<String> {
+        fun transform(file: File): File {
+            if (!relative) {
+                return file
+            }
+            return file.relativeTo(File(File("").absolutePath))
+        }
+
         // Constructs a formatted preview (pads the first column to enhance readability)
-        val pairs = collectFilePairs().map { (old, new) -> Pair("${relative(old)}", "${relative(new)}") }
-        val padding = pairs.maxByOrNull { (old, _) -> old.length }?.first?.length ?: 0
-        return pairs.map { (old, new) -> "${old.padEnd(padding)} -> $new" }
+        val changes = collectFileChanges().map { (old, new) -> Pair("${transform(old)}", "${transform(new)}") }
+        val padding = changes.maxByOrNull { (old, _) -> old.length }?.first?.length ?: 0
+        return changes.map { (old, new) -> "${old.padEnd(padding)} -> $new" }.toList()
     }
 
     fun rename(): Int {
-        val pairs = collectFilePairs()
-        for ((source, target) in pairs) {
-            source.renameTo(target)
-        }
-        return pairs.size
+        return collectFileChanges().onEach { it.first.renameTo(it.second) }.count()
     }
 
     fun setPaths(value: Set<Path>): Reviso {
@@ -57,39 +60,45 @@ class Reviso {
         return this
     }
 
-    private fun collectFilePairs(): Collection<Pair<File, File>> {
-        val pattern by lazy { Pattern.compile(search ?: "") }
-        val filePairs = mutableListOf<Pair<File, File>>()
+    private fun collectFileChanges(): Sequence<Pair<File, File>> {
+        val isSearch by lazy { !search.isNullOrEmpty() }
+        val isStandard by lazy { method != null }
 
-        // Collect a preview of each renamed file
-        for (source in collectFiles()) {
+        val search by lazy { search ?: "" }
+        val replace by lazy { replace ?: "" }
+        val pattern by lazy { Pattern.compile(search) }
+
+        fun transform(source: File): Pair<File, File>? {
             val target = try {
-                if (isSearch()) {
-                    when (regex) {
-                        true -> renameWithPattern(source, pattern, replace ?: "")
-                        false -> renameWithString(source, search ?: "", replace ?: "")
+                when {
+                    isSearch -> when (regex) {
+                        true -> renameWithPattern(source, pattern, replace)
+                        false -> renameWithString(source, search, replace)
                     }
-                } else if (isStandard()) {
-                    when (method) {
+                    isStandard -> when (method) {
                         Method.Lower -> renameToLower(source)
                         Method.Upper -> renameToUpper(source)
                         Method.Sentence -> renameToSentence(source)
                         Method.TitleAp -> renameToTitleAp(source)
                         Method.TitleSimple -> renameToTitleSimple(source)
-                        else -> continue
+                        else -> null
                     }
-                } else {
-                    continue
+                    else -> null
                 }
             } catch (_: IllegalArgumentException) {
-                continue
+                null
             }
-            if (source.name != target.name) {
-                // Ignore unchanged file names
-                filePairs.add(Pair(source, target))
+
+            return target?.let {
+                if (source.name != target.name) {
+                    // Ignore unchanged file names
+                    return Pair(source, target)
+                }
+                return null
             }
         }
-        return filePairs
+
+        return collectFiles().mapNotNull { transform(it) }
     }
 
     private fun collectFiles(): Sequence<File> {
@@ -97,7 +106,7 @@ class Reviso {
     }
 
     private fun collectFiles(path: File): Sequence<File> {
-        return when(recursive) {
+        return when (recursive) {
             true -> path.walkBottomUp()
             false -> path.walkBottomUp().maxDepth(1)
         }
@@ -105,88 +114,6 @@ class Reviso {
 
     private fun collectFiles(path: String): Sequence<File> {
         return collectFiles(File(path))
-    }
-
-    private fun isSearch(): Boolean {
-        return search.isNullOrEmpty()
-    }
-
-    private fun isStandard(): Boolean {
-        return method != null
-    }
-
-    private fun relative(file: File): File {
-        return file.relativeTo(File(File("").absolutePath))
-    }
-
-    /**
-     * Decapitalizes every letter in the file name.
-     */
-    private fun renameToLower(file: File): File {
-        return createFile(file.parent, file.name.toLocaleLowerCase())
-    }
-
-    /**
-     * Capitalizes every letter in the file name.
-     */
-    private fun renameToUpper(file: File): File {
-        return createFile(file.parent, file.name.toLocaleUpperCase())
-    }
-
-    /**
-     * Capitalizes the first letter of the file name.
-     */
-    private fun renameToSentence(file: File): File {
-        return createFile(file.parent, file.name.toLocaleLowerCase().localeCapitalize())
-    }
-
-    /**
-     * Capitalizes the first letter of every word in the file name (AP).
-     */
-    private fun renameToTitleAp(file: File): File {
-        val words = file.name.split(" ") as MutableList
-        for (i in 0 until words.size) {
-            words[i] = words[i].toLocaleLowerCase()
-            if (i == 0 || i == words.size - 1 || words[i] !in AP_WORDS) {
-                words[i] = words[i].localeCapitalize()
-            }
-        }
-        return createFile(file.parent, words.joinToString(" "))
-    }
-
-    /**
-     * Capitalizes the first letter of every word in the file name (simple).
-     */
-    private fun renameToTitleSimple(file: File): File {
-        fun transform(word: String): String {
-            return word.toLocaleLowerCase().localeCapitalize()
-        }
-
-        return createFile(file.parent, file.name.split(" ").joinToString(" ") { transform(it) })
-    }
-
-    /**
-     * Replaces all matches in the file name (regex).
-     */
-    private fun renameWithPattern(file: File, search: Pattern, replace: String): File {
-        return createFile(file.parent, search.matcher(file.name).replaceAll(replace))
-    }
-
-    /**
-     * Replaces all matches in the file name (simple).
-     */
-    private fun renameWithString(file: File, search: String, replace: String): File {
-        return createFile(file.parent, file.name.replace(search, replace))
-    }
-
-    /**
-     * Returns a file if the name is not empty. Throws an exception otherwise.
-     */
-    private fun createFile(parent: String, child: String): File {
-        if (child.isNotEmpty()) {
-            return File(parent, child)
-        }
-        throw IllegalArgumentException("The replacement must not be empty.")
     }
 
     companion object {
@@ -212,5 +139,75 @@ class Reviso {
             "up",
             "yet",
         )
+
+        /**
+         * Decapitalizes every letter in the file name.
+         */
+        private fun renameToLower(file: File): File {
+            return createFile(file.parent, file.name.toLocaleLowerCase())
+        }
+
+        /**
+         * Capitalizes every letter in the file name.
+         */
+        private fun renameToUpper(file: File): File {
+            return createFile(file.parent, file.name.toLocaleUpperCase())
+        }
+
+        /**
+         * Capitalizes the first letter of the file name.
+         */
+        private fun renameToSentence(file: File): File {
+            return createFile(file.parent, file.name.toLocaleLowerCase().localeCapitalize())
+        }
+
+        /**
+         * Capitalizes the first letter of every word in the file name (AP).
+         */
+        private fun renameToTitleAp(file: File): File {
+            val words = file.name.split(" ") as MutableList
+            for (i in 0 until words.size) {
+                words[i] = words[i].toLocaleLowerCase()
+                if (i == 0 || i == words.size - 1 || words[i] !in AP_WORDS) {
+                    words[i] = words[i].localeCapitalize()
+                }
+            }
+            return createFile(file.parent, words.joinToString(" "))
+        }
+
+        /**
+         * Capitalizes the first letter of every word in the file name (simple).
+         */
+        private fun renameToTitleSimple(file: File): File {
+            fun transform(word: String): String {
+                return word.toLocaleLowerCase().localeCapitalize()
+            }
+
+            return createFile(file.parent, file.name.split(" ").joinToString(" ") { transform(it) })
+        }
+
+        /**
+         * Replaces all matches in the file name (regex).
+         */
+        private fun renameWithPattern(file: File, search: Pattern, replace: String): File {
+            return createFile(file.parent, search.matcher(file.name).replaceAll(replace))
+        }
+
+        /**
+         * Replaces all matches in the file name (simple).
+         */
+        private fun renameWithString(file: File, search: String, replace: String): File {
+            return createFile(file.parent, file.name.replace(search, replace))
+        }
+
+        /**
+         * Returns a file if the name is not empty. Throws an exception otherwise.
+         */
+        private fun createFile(parent: String, child: String): File {
+            if (child.isNotEmpty()) {
+                return File(parent, child)
+            }
+            throw IllegalArgumentException("The replacement must not be empty.")
+        }
     }
 }

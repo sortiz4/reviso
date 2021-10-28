@@ -36,7 +36,7 @@ fn main() {
     };
 
     // Spawn the Java process
-    Command::new(if cfg![target_os = "windows"] { "javaw" } else { "java" })
+    Command::new("java")
         .args(merged_arguments)
         .status()
         .unwrap();
