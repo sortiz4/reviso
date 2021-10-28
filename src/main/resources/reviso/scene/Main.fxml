@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox
-    fx:controller="reviso.scene.Root"
+    fx:controller="reviso.scene.Main"
     onDragDropped="#onDragDrop"
     onDragOver="#onDragOver"
     prefWidth="500.0"

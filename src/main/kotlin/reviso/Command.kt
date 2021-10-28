@@ -12,7 +12,7 @@ import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.path
 import java.nio.file.Path
 
-class Cli(private val gui: () -> Unit) : Clikt(name = Constants.name()) {
+class Command(private val gui: () -> Unit) : Clikt(name = Constants.name()) {
     private val paths: Set<Path> by argument().path(canBeFile = false, mustExist = true).multiple().unique()
     private val method: String by option(*METHOD_NAMES, help = METHOD_HELP).choice(*METHOD_CHOICES).default("")
     private val search: String by option(*SEARCH_NAMES, help = SEARCH_HELP).default("")

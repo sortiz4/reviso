@@ -26,7 +26,7 @@ import reviso.scene.alerts.NoDirectoryAlert
 import reviso.scene.alerts.PreviewAlert
 import reviso.scene.alerts.ResultAlert
 
-class Root : Initializable {
+class Main : Initializable {
     private class NoDirectoryException : IoException()
 
     // JavaFx source directory properties

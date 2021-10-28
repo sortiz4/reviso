@@ -29,7 +29,7 @@ object Constants {
     }
 
     fun scene(): Parent {
-        return FxmlLoader.load(resource("reviso/scene/Root.fxml"))
+        return FxmlLoader.load(resource("reviso/scene/Main.fxml"))
     }
 
     private fun resource(path: String): Url? {

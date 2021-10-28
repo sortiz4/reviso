@@ -22,7 +22,7 @@ class Main : Application() {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Cli { launch(Main::class.java, *args) }.main(args)
+            Command { launch(Main::class.java, *args) }.main(args)
             exitProcess(0)
         }
     }
