@@ -6,17 +6,17 @@ import java.util.regex.Pattern
 
 class Reviso {
     private var paths: Set<Path> = emptySet()
-    private var method: String = ""
-    private var search: String = ""
-    private var replace: String = ""
+    private var method: Method? = null
+    private var search: String? = null
+    private var replace: String? = null
     private var regex: Boolean = false
     private var recursive: Boolean = false
 
     fun preview(): List<String> {
         // Constructs a formatted preview (pads the first column to enhance readability)
-        val mappings = collectFilePairs().map { (old, new) -> Pair("${relative(old)}", "${relative(new)}") }
-        val padding = mappings.maxByOrNull { (old, _) -> old.length }?.first?.length ?: 0
-        return mappings.map { (old, new) -> "${old.padEnd(padding)} -> $new" }
+        val pairs = collectFilePairs().map { (old, new) -> Pair("${relative(old)}", "${relative(new)}") }
+        val padding = pairs.maxByOrNull { (old, _) -> old.length }?.first?.length ?: 0
+        return pairs.map { (old, new) -> "${old.padEnd(padding)} -> $new" }
     }
 
     fun rename(): Int {
@@ -33,7 +33,7 @@ class Reviso {
     }
 
     fun setMethod(value: String): Reviso {
-        method = value
+        method = Method.from(value)
         return this
     }
 
@@ -58,36 +58,38 @@ class Reviso {
     }
 
     private fun collectFilePairs(): Collection<Pair<File, File>> {
-        val pairs = mutableListOf<Pair<File, File>>()
-        val pattern = Pattern.compile(search)
+        val pattern by lazy { Pattern.compile(search ?: "") }
+        val filePairs = mutableListOf<Pair<File, File>>()
 
         // Collect a preview of each renamed file
         for (source in collectFiles()) {
             val target = try {
-                if (isSearchAndReplace()) {
+                if (isSearch()) {
                     when (regex) {
-                        true -> renameWithPattern(source, pattern, replace)
-                        false -> renameWithString(source, search, replace)
+                        true -> renameWithPattern(source, pattern, replace ?: "")
+                        false -> renameWithString(source, search ?: "", replace ?: "")
+                    }
+                } else if (isStandard()) {
+                    when (method) {
+                        Method.Lower -> renameToLower(source)
+                        Method.Upper -> renameToUpper(source)
+                        Method.Sentence -> renameToSentence(source)
+                        Method.TitleAp -> renameToTitleAp(source)
+                        Method.TitleSimple -> renameToTitleSimple(source)
+                        else -> continue
                     }
                 } else {
-                    when (method) {
-                        Constants.CHOICE_LOWER -> renameToLower(source)
-                        Constants.CHOICE_UPPER -> renameToUpper(source)
-                        Constants.CHOICE_SENTENCE -> renameToSentence(source)
-                        Constants.CHOICE_TITLE_AP -> renameToTitleAp(source)
-                        Constants.CHOICE_TITLE_SIMPLE -> renameToTitleSimple(source)
-                        else -> throw RuntimeException()
-                    }
+                    continue
                 }
             } catch (_: IllegalArgumentException) {
                 continue
             }
             if (source.name != target.name) {
                 // Ignore unchanged file names
-                pairs.add(Pair(source, target))
+                filePairs.add(Pair(source, target))
             }
         }
-        return pairs
+        return filePairs
     }
 
     private fun collectFiles(): Sequence<File> {
@@ -105,12 +107,12 @@ class Reviso {
         return collectFiles(File(path))
     }
 
-    private fun isSearchAndReplace(): Boolean {
-        return !this.isStandard()
+    private fun isSearch(): Boolean {
+        return search.isNullOrEmpty()
     }
 
     private fun isStandard(): Boolean {
-        return method.isNotEmpty()
+        return method != null
     }
 
     private fun relative(file: File): File {

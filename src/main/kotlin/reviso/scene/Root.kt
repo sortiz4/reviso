@@ -19,6 +19,7 @@ import javafx.scene.input.KeyEvent
 import javafx.scene.input.TransferMode
 import javafx.stage.DirectoryChooser
 import reviso.Constants
+import reviso.Method
 import reviso.Reviso
 import reviso.scene.alerts.InvalidDirectoryAlert
 import reviso.scene.alerts.NoDirectoryAlert
@@ -153,7 +154,7 @@ class Root : Initializable {
 
     override fun initialize(resource: Url?, bundle: ResourceBundle?) {
         // Populate the list of choices
-        fxChoices.items.addAll(*Constants.CHOICES)
+        fxChoices.items.addAll(*Method.choices())
         fxChoices.selectionModel.selectFirst()
     }
 

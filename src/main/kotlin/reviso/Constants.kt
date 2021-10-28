@@ -6,23 +6,8 @@ import javafx.scene.Parent
 import javafx.scene.image.Image
 
 object Constants {
-    // Text and dialog
     const val TITLE = "Reviso"
     const val VERSION = "2.0"
-
-    // Standard transformations
-    const val CHOICE_LOWER = "Lowercase"
-    const val CHOICE_UPPER = "Uppercase"
-    const val CHOICE_SENTENCE = "Sentence"
-    const val CHOICE_TITLE_AP = "Title (AP)"
-    const val CHOICE_TITLE_SIMPLE = "Title (simple)"
-    val CHOICES = arrayOf(
-        CHOICE_LOWER,
-        CHOICE_UPPER,
-        CHOICE_SENTENCE,
-        CHOICE_TITLE_AP,
-        CHOICE_TITLE_SIMPLE,
-    )
 
     fun icons(): Array<Image> {
         val icons = arrayOf(
