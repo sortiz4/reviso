@@ -21,7 +21,7 @@ object Constants {
     }
 
     fun name(): String {
-        return TITLE.toLocaleLowerCase()
+        return TITLE.toLowerCase()
     }
 
     fun open(message: String): String {

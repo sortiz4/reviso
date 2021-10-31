@@ -13,8 +13,8 @@ import com.github.ajalt.clikt.parameters.types.path
 import java.nio.file.Path
 
 class Command(private val gui: () -> Unit) : Clikt(name = Constants.name()) {
-    private val paths: Set<Path> by argument().path(canBeFile = false, mustExist = true).multiple().unique()
-    private val method: String by option(*METHOD_NAMES, help = METHOD_HELP).choice(*METHOD_CHOICES).default("")
+    private val paths: Set<Path> by argument().path(mustExist = true).multiple().unique()
+    private val case: String by option(*CASE_NAMES, help = CASE_HELP).choice(*CASE_CHOICES).default("")
     private val search: String by option(*SEARCH_NAMES, help = SEARCH_HELP).default("")
     private val replace: String by option(*REPLACE_NAMES, help = REPLACE_HELP).default("")
     private val recursive: Boolean by option(*RECURSIVE_NAMES, help = RECURSIVE_HELP).flag(default = false)
@@ -35,7 +35,7 @@ class Command(private val gui: () -> Unit) : Clikt(name = Constants.name()) {
                 val reviso = (
                     Reviso()
                         .paths(paths)
-                        .method(method)
+                        .case(case)
                         .search(search)
                         .replace(replace)
                         .isRecursive(recursive)
@@ -50,7 +50,7 @@ class Command(private val gui: () -> Unit) : Clikt(name = Constants.name()) {
 
     companion object {
         // Option names
-        private val METHOD_NAMES = arrayOf("--method", "-m")
+        private val CASE_NAMES = arrayOf("--case", "-c")
         private val SEARCH_NAMES = arrayOf("--search", "-s")
         private val REPLACE_NAMES = arrayOf("--replace", "-r")
         private val RECURSIVE_NAMES = arrayOf("--recursive", "-R")
@@ -60,15 +60,15 @@ class Command(private val gui: () -> Unit) : Clikt(name = Constants.name()) {
         private val VERSION_NAMES = arrayOf("--version", "-v")
 
         // Help messages
-        private const val METHOD_HELP = "The standard method to use. Disables search and replace."
-        private const val SEARCH_HELP = "Text to search for. Disables method selection."
-        private const val REPLACE_HELP = "Text to replace the search text with. Disables method selection."
+        private const val CASE_HELP = "The common case to use. Disables search and replace."
+        private const val SEARCH_HELP = "Text to search for. Disables case selection."
+        private const val REPLACE_HELP = "Text to replace the search text with. Disables case selection."
         private const val RECURSIVE_HELP = "Descend into directories."
         private const val EXPRESSION_HELP = "Interpret the search and replace text as a regular expression."
         private const val LAUNCH_HELP = "Launch the graphical user interface."
         private const val PREVIEW_HELP = "Preview the changes."
 
         // Extra details
-        private val METHOD_CHOICES = Method.cliNames()
+        private val CASE_CHOICES = Case.cliNames()
     }
 }

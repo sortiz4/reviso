@@ -18,8 +18,8 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.TransferMode
 import javafx.stage.DirectoryChooser
+import reviso.Case
 import reviso.Constants
-import reviso.Method
 import reviso.Reviso
 import reviso.scene.alerts.InvalidDirectoryAlert
 import reviso.scene.alerts.NoDirectoryAlert
@@ -35,6 +35,12 @@ class Main : Initializable {
     @Fxml
     private lateinit var fxStatus: Label
 
+    // JavaFx common cases properties
+    @Fxml
+    private lateinit var fxChoices: ComboBox<String>
+    @Fxml
+    private lateinit var fxRecursiveCase: CheckBox
+
     // JavaFx pattern matching properties
     @Fxml
     private lateinit var fxSearch: TextField
@@ -44,12 +50,6 @@ class Main : Initializable {
     private lateinit var fxExpressionSearch: CheckBox
     @Fxml
     private lateinit var fxRecursiveSearch: CheckBox
-
-    // JavaFx standard method properties
-    @Fxml
-    private lateinit var fxChoices: ComboBox<String>
-    @Fxml
-    private lateinit var fxRecursiveStandard: CheckBox
 
     // Regular properties
     private var directory: String? = null
@@ -121,6 +121,20 @@ class Main : Initializable {
     }
 
     @Fxml
+    fun onPreviewCase() {
+        onAction {
+            PreviewAlert(onCase().preview(relative = false)).showAndWait()
+        }
+    }
+
+    @Fxml
+    fun onExecuteCase() {
+        onAction {
+            ResultAlert(onCase().rename()).showAndWait()
+        }
+    }
+
+    @Fxml
     fun onPreviewSearch() {
         if (fxSearch.text.isNotEmpty()) {
             onAction {
@@ -138,23 +152,9 @@ class Main : Initializable {
         }
     }
 
-    @Fxml
-    fun onPreviewStandard() {
-        onAction {
-            PreviewAlert(onStandard().preview(relative = false)).showAndWait()
-        }
-    }
-
-    @Fxml
-    fun onExecuteStandard() {
-        onAction {
-            ResultAlert(onStandard().rename()).showAndWait()
-        }
-    }
-
     override fun initialize(resource: Url?, bundle: ResourceBundle?) {
         // Populate the list of choices
-        fxChoices.items.addAll(*Method.guiNames())
+        fxChoices.items.addAll(*Case.guiNames())
         fxChoices.selectionModel.selectFirst()
     }
 
@@ -166,23 +166,23 @@ class Main : Initializable {
         }
     }
 
+    private fun onCase(): Reviso {
+        return (
+            Reviso()
+                .paths(Paths.get(directory!!))
+                .case(fxChoices.selectionModel.selectedItem)
+                .isRecursive(fxRecursiveCase.isSelected)
+        )
+    }
+
     private fun onSearch(): Reviso {
         return (
             Reviso()
-                .paths(setOf(Paths.get(directory!!)))
+                .paths(Paths.get(directory!!))
                 .search(fxSearch.text)
                 .replace(fxReplace.text)
                 .isRecursive(fxRecursiveSearch.isSelected)
                 .isExpression(fxExpressionSearch.isSelected)
-        )
-    }
-
-    private fun onStandard(): Reviso {
-        return (
-            Reviso()
-                .paths(setOf(Paths.get(directory!!)))
-                .method(fxChoices.selectionModel.selectedItem)
-                .isRecursive(fxRecursiveStandard.isSelected)
         )
     }
 }
