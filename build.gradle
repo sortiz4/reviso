@@ -4,8 +4,13 @@ plugins {
     id "org.openjfx.javafxplugin" version "0.0.10"
 }
 
-group = "reviso"
-version = "2.0.0"
+ext {
+    appTitle = "reviso"
+    appVersion = "2.0.0"
+}
+
+group = appTitle
+version = appVersion
 
 repositories {
     mavenCentral()
@@ -36,8 +41,8 @@ task setup {
 }
 
 application {
-    mainModule = "${group}"
-    mainClass = "${mainModule}.Main"
+    mainModule = "${appTitle}"
+    mainClass = "${appTitle}.Main"
 }
 
 build {
@@ -47,6 +52,13 @@ build {
 compileKotlin {
     kotlinOptions {
         jvmTarget = "12"
+    }
+}
+
+jar {
+    manifest {
+        attributes "Implementation-Title": appTitle
+        attributes "Implementation-Version": appVersion
     }
 }
 

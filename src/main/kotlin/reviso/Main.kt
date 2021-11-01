@@ -10,7 +10,7 @@ class Main : Application() {
         // Load the scene and set the title
         stage.icons.addAll(Resources.icons())
         stage.scene = Scene(Resources.scene())
-        stage.title = Resources.TITLE
+        stage.title = Resources.title()
         stage.show()
 
         // Set the window constraints

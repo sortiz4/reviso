@@ -12,7 +12,7 @@ import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
 import java.io.File
 
-class Command(private val gui: () -> Unit) : Clikt(name = Resources.TITLE.toLowerCase()) {
+class Command(private val gui: () -> Unit) : Clikt(name = Resources.name()) {
     private val paths: Set<File> by argument().file(canBeFile = false, mustExist = true).multiple().unique()
     private val case: String by option(*CASE_NAMES, help = CASE_HELP).choice(*CASE_CHOICES).default("")
     private val search: String by option(*SEARCH_NAMES, help = SEARCH_HELP).default("")
@@ -24,7 +24,7 @@ class Command(private val gui: () -> Unit) : Clikt(name = Resources.TITLE.toLowe
     private val preview: Boolean by option(*PREVIEW_NAMES, help = PREVIEW_HELP).flag(default = false)
 
     init {
-        versionOption(Resources.VERSION, names = VERSION_NAMES.toSet())
+        versionOption(Resources.version(), names = VERSION_NAMES.toSet())
     }
 
     override fun run() {

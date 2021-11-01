@@ -4,10 +4,20 @@ import java.net.URL as Url
 import javafx.fxml.FXMLLoader as FxmlLoader
 import javafx.scene.Parent
 import javafx.scene.image.Image
+import net.pearx.kasechange.toTitleCase
 
 object Resources {
-    const val TITLE = "Reviso"
-    const val VERSION = "2.0.0"
+    fun name(): String {
+        return Resources::class.java.`package`.implementationTitle ?: ""
+    }
+
+    fun title(): String {
+        return name().toTitleCase()
+    }
+
+    fun version(): String {
+        return Resources::class.java.`package`.implementationVersion ?: ""
+    }
 
     fun icons(): Array<Image> {
         val icons = arrayOf(
