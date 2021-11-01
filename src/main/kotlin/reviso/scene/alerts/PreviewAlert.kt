@@ -17,7 +17,7 @@ class PreviewAlert(preview: Collection<String>) : Alert(AlertType.CONFIRMATION) 
             isResizable = true
 
             // View dimensions (rows, columns, insets)
-            val cols = preview.maxByOrNull { entry -> entry.length }?.length!!
+            val cols = preview.maxByOrNull { it.length }?.length!!
             val rows = preview.size.coerceAtMost(TextArea.DEFAULT_PREF_ROW_COUNT)
             val inset = 10.0
 

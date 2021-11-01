@@ -53,7 +53,7 @@ fun String.toUpperCase(): String {
  *
  */
 fun String.toSentenceCase(): String {
-    return toLowerCase().replaceFirstChar { c -> if (c.isLowerCase()) c.titlecase(Locale.getDefault()) else "$c" }
+    return toLowerCase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else "$it" }
 }
 
 /**
@@ -73,136 +73,119 @@ fun File.toRelativeFile(): File {
 /**
  *
  */
-fun File.asCloneByLowerCase(): File {
-    return asClone(smartName().toLowerCase(), smartExtension())
+fun File.asCloneByLowerCase(withExtension: Boolean): File {
+    return asClone(withExtension) { it.toLowerCase() }
 }
 
 /**
  *
  */
-fun File.asCloneByUpperCase(): File {
-    return asClone(smartName().toUpperCase(), smartExtension())
+fun File.asCloneByUpperCase(withExtension: Boolean): File {
+    return asClone(withExtension) { it.toUpperCase() }
 }
 
 /**
  *
  */
-fun File.asCloneByDotCase(): File {
-    return asClone(smartName().toDotCase(), smartExtension())
+fun File.asCloneByDotCase(withExtension: Boolean): File {
+    return asClone(withExtension) { it.toDotCase() }
 }
 
 /**
  *
  */
-fun File.asCloneByKebabCase(): File {
-    return asClone(smartName().toKebabCase(), smartExtension())
+fun File.asCloneByKebabCase(withExtension: Boolean): File {
+    return asClone(withExtension) { it.toKebabCase() }
 }
 
 /**
  *
  */
-fun File.asCloneBySnakeCase(): File {
-    return asClone(smartName().toSnakeCase(), smartExtension())
+fun File.asCloneBySnakeCase(withExtension: Boolean): File {
+    return asClone(withExtension) { it.toSnakeCase() }
 }
 
 /**
  *
  */
-fun File.asCloneByCamelCase(): File {
-    return asClone(smartName().toCamelCase(), smartExtension())
+fun File.asCloneByCamelCase(withExtension: Boolean): File {
+    return asClone(withExtension) { it.toCamelCase() }
 }
 
 /**
  *
  */
-fun File.asCloneByPascalCase(): File {
-    return asClone(smartName().toPascalCase(), smartExtension())
+fun File.asCloneByPascalCase(withExtension: Boolean): File {
+    return asClone(withExtension) { it.toPascalCase() }
 }
 
 /**
  * Capitalizes the first letter of every word in the file name (simple).
  */
-fun File.asCloneByTitleCase(): File {
-    return asClone(smartName().toTitleCase(), smartExtension())
+fun File.asCloneByTitleCase(withExtension: Boolean): File {
+    return asClone(withExtension) { it.toTitleCase() }
 }
 
 /**
  * Capitalizes the first letter of every word in the file name (associated press).
  */
-fun File.asCloneByTitleApCase(): File {
-    val words = smartName().splitToWords()
+fun File.asCloneByTitleApCase(withExtension: Boolean): File {
+    fun transform(name: String): String {
+        val words = name.splitToWords()
 
-    fun transform(i: Int, word: String): String {
-        if (i == 0 || i == words.size - 1 || word !in AP_WORDS) {
-            return word.toTitleCase()
+        fun transform(i: Int, word: String): String {
+            if (i == 0 || i == words.size - 1 || word !in AP_WORDS) {
+                return word.toTitleCase()
+            }
+            return word
         }
-        return word
+
+        return words.mapIndexed { i, word -> transform(i, word.toLowerCase()) }.joinToString(" ")
     }
 
-    return asClone(words.mapIndexed { i, w -> transform(i, w.toLowerCase()) }.joinToString(" "), smartExtension())
+    return asClone(withExtension) { transform(it) }
 }
 
 /**
  * Capitalizes the first letter of the file name.
  */
-fun File.asCloneBySentenceCase(): File {
-    return asClone(smartName().toSentenceCase(), smartExtension())
+fun File.asCloneBySentenceCase(withExtension: Boolean): File {
+    return asClone(withExtension) { it.toSentenceCase() }
 }
 
 /**
  * Replaces all matches in the file name (simple).
  */
-fun File.asCloneBySearchAndReplace(search: String, replace: String): File {
-    return asClone(name.replace(search, replace))
+fun File.asCloneBySearchAndReplace(search: String, replace: String, withExtension: Boolean): File {
+    return asClone(withExtension) { it.replace(search, replace) }
 }
 
 /**
  * Replaces all matches in the file name (pattern).
  */
-fun File.asCloneBySearchAndReplace(search: Pattern, replace: String): File {
-    return asClone(search.matcher(name).replaceAll(replace))
+fun File.asCloneBySearchAndReplace(search: Pattern, replace: String, withExtension: Boolean): File {
+    return asClone(withExtension) { search.matcher(it).replaceAll(replace) }
 }
 
 /**
  * Returns a file if the name is not empty. Throws an exception otherwise.
  */
-private fun File.asClone(child: String): File {
-    if (child.isNotEmpty()) {
-        return File(parent, child)
-    }
-    throw IllegalArgumentException("The child must not be empty.")
-}
-
-/**
- * Returns a file if the name is not empty. Throws an exception otherwise.
- */
-private fun File.asClone(name: String, extension: String): File {
+private fun File.asClone(withExtension: Boolean, callback: (String) -> String): File {
     val dot = if (extension.isNotEmpty()) {
         "."
     } else {
         ""
     }
-    return asClone("$name$dot$extension")
-}
 
-/**
- *
- */
-private fun File.smartName(): String {
-    return if (!isDirectory) {
-        nameWithoutExtension
+    val child = if (!isDirectory && !withExtension) {
+        "${callback(nameWithoutExtension)}${dot}${extension}"
     } else {
-        name
+        callback(name)
     }
-}
 
-/**
- *
- */
-private fun File.smartExtension(): String {
-    return if (!isDirectory) {
-        extension
-    } else {
-        ""
+    if (child.isNotEmpty()) {
+        return File(parent, child)
     }
+
+    throw IllegalArgumentException("The new name must not be empty.")
 }

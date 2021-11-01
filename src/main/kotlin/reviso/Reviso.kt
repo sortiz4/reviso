@@ -10,6 +10,7 @@ class Reviso {
     private var replace: String? = null
     private var isRecursive: Boolean = false
     private var isExpression: Boolean = false
+    private var withExtension: Boolean = false
 
     fun preview(relative: Boolean): Collection<String> {
         fun transform(file: File): File {
@@ -63,6 +64,11 @@ class Reviso {
         return this
     }
 
+    fun withExtension(value: Boolean): Reviso {
+        withExtension = value
+        return this
+    }
+
     private fun collectFileChanges(): Sequence<Pair<File, File>> {
         val isCase by lazy { case != null }
         val isSearch by lazy { !search.isNullOrEmpty() }
@@ -75,21 +81,21 @@ class Reviso {
             val target = try {
                 when {
                     isCase -> when (case) {
-                        Case.LOWER -> source.asCloneByLowerCase()
-                        Case.UPPER -> source.asCloneByUpperCase()
-                        Case.DOT -> source.asCloneByDotCase()
-                        Case.KEBAB -> source.asCloneByKebabCase()
-                        Case.SNAKE -> source.asCloneBySnakeCase()
-                        Case.CAMEL -> source.asCloneByCamelCase()
-                        Case.PASCAL -> source.asCloneByPascalCase()
-                        Case.TITLE -> source.asCloneByTitleCase()
-                        Case.TITLE_AP -> source.asCloneByTitleApCase()
-                        Case.SENTENCE -> source.asCloneBySentenceCase()
+                        Case.LOWER -> source.asCloneByLowerCase(withExtension)
+                        Case.UPPER -> source.asCloneByUpperCase(withExtension)
+                        Case.DOT -> source.asCloneByDotCase(withExtension)
+                        Case.KEBAB -> source.asCloneByKebabCase(withExtension)
+                        Case.SNAKE -> source.asCloneBySnakeCase(withExtension)
+                        Case.CAMEL -> source.asCloneByCamelCase(withExtension)
+                        Case.PASCAL -> source.asCloneByPascalCase(withExtension)
+                        Case.TITLE -> source.asCloneByTitleCase(withExtension)
+                        Case.TITLE_AP -> source.asCloneByTitleApCase(withExtension)
+                        Case.SENTENCE -> source.asCloneBySentenceCase(withExtension)
                         else -> null
                     }
                     isSearch -> when (isExpression) {
-                        true -> source.asCloneBySearchAndReplace(pattern, replace)
-                        false -> source.asCloneBySearchAndReplace(search, replace)
+                        true -> source.asCloneBySearchAndReplace(pattern, replace, withExtension)
+                        false -> source.asCloneBySearchAndReplace(search, replace, withExtension)
                     }
                     else -> null
                 }
@@ -114,9 +120,10 @@ class Reviso {
     }
 
     private fun collectFiles(file: File): Sequence<File> {
-        return when (isRecursive) {
+        val files = when (isRecursive) {
             true -> file.walkBottomUp()
             false -> file.walkBottomUp().maxDepth(1)
         }
+        return files.toList().dropLast(1).asSequence()
     }
 }
