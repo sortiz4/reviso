@@ -1,7 +1,6 @@
 package reviso
 
 import java.io.File
-import java.nio.file.Path
 import java.util.Locale
 import java.util.regex.Pattern
 import net.pearx.kasechange.splitToWords
@@ -59,8 +58,8 @@ fun String.toSentenceCase(): String {
 /**
  *
  */
-fun Path.toAbsoluteFile(): File {
-    return File(File("$this").absolutePath)
+fun File.toAbsoluteFile(): File {
+    return File(absolutePath)
 }
 
 /**

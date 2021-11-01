@@ -1,10 +1,9 @@
 package reviso
 
 import java.io.File
-import java.nio.file.Path
 
 class Reviso {
-    private var paths: Set<Path> = emptySet()
+    private var paths: Set<File> = emptySet()
     private var case: Case? = null
     private var search: String? = null
     private var replace: String? = null
@@ -30,11 +29,11 @@ class Reviso {
         return collectFileChanges().onEach { (source, target) -> source.renameTo(target) }.count()
     }
 
-    fun paths(value: Path): Reviso {
+    fun paths(value: File): Reviso {
         return paths(setOf(value))
     }
 
-    fun paths(value: Set<Path>): Reviso {
+    fun paths(value: Set<File>): Reviso {
         paths = value
         return this
     }

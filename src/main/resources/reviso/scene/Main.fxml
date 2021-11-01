@@ -14,7 +14,7 @@
     fx:controller="reviso.scene.Main"
     onDragDropped="#onDragDrop"
     onDragOver="#onDragOver"
-    prefWidth="500.0"
+    prefWidth="525.0"
     spacing="10.0"
     xmlns:fx="http://javafx.com/fxml">
     <padding>
@@ -31,13 +31,14 @@
                 <Button onAction="#onBrowse" text="Browse" />
                 <Button onAction="#onOpen" text="Open" />
             </HBox>
-            <Label fx:id="fxStatus" text="Nothing is open..." />
+            <Label fx:id="fxStatus" text="Open a location..." />
         </VBox>
     </TitledPane>
     <TitledPane collapsible="false" text="Common cases">
         <VBox spacing="5.0">
             <ComboBox fx:id="fxChoices" maxWidth="Infinity" />
             <HBox alignment="CENTER_RIGHT" spacing="5.0">
+                <CheckBox fx:id="fxExtensionCase" text="Include extension" />
                 <CheckBox fx:id="fxRecursiveCase" text="Recursive" />
                 <Button onAction="#onPreviewCase" text="Preview" />
                 <Button onAction="#onExecuteCase" text="Rename" />
@@ -49,7 +50,8 @@
             <TextField fx:id="fxSearch" promptText="Search for..." />
             <TextField fx:id="fxReplace" promptText="Replace with..." />
             <HBox alignment="CENTER_RIGHT" spacing="5.0">
-                <CheckBox fx:id="fxExpressionSearch" text="Expression" />
+                <CheckBox fx:id="fxExpressionSearch" text="Regular expression" />
+                <CheckBox fx:id="fxExtensionSearch" text="Include extension" />
                 <CheckBox fx:id="fxRecursiveSearch" text="Recursive" />
                 <Button onAction="#onPreviewSearch" text="Preview" />
                 <Button onAction="#onExecuteSearch" text="Rename" />

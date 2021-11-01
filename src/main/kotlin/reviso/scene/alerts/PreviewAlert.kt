@@ -11,6 +11,7 @@ class PreviewAlert(preview: Collection<String>) : Alert(AlertType.CONFIRMATION) 
         title = "Preview"
         headerText = "Preview the changes."
         buttonTypes.remove(1, buttonTypes.size)
+
         if (preview.isEmpty()) {
             contentText = "No changes detected."
         } else {

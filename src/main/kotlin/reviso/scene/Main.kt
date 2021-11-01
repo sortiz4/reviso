@@ -1,14 +1,10 @@
 package reviso.scene
 
 import java.io.File
-import java.io.IOException as IoException
 import java.net.URL as Url
-import java.nio.file.Paths
 import java.util.ResourceBundle
-import javafx.event.ActionEvent
 import javafx.fxml.FXML as Fxml
 import javafx.fxml.Initializable
-import javafx.scene.Node
 import javafx.scene.control.CheckBox
 import javafx.scene.control.ComboBox
 import javafx.scene.control.Label
@@ -27,9 +23,7 @@ import reviso.scene.alerts.PreviewAlert
 import reviso.scene.alerts.ResultAlert
 
 class Main : Initializable {
-    private class NoDirectoryException : IoException()
-
-    // JavaFx source directory properties
+    // JavaFx location properties
     @Fxml
     private lateinit var fxPath: TextField
     @Fxml
@@ -39,9 +33,11 @@ class Main : Initializable {
     @Fxml
     private lateinit var fxChoices: ComboBox<String>
     @Fxml
+    private lateinit var fxExtensionCase: CheckBox
+    @Fxml
     private lateinit var fxRecursiveCase: CheckBox
 
-    // JavaFx pattern matching properties
+    // JavaFx search and replace properties
     @Fxml
     private lateinit var fxSearch: TextField
     @Fxml
@@ -49,38 +45,40 @@ class Main : Initializable {
     @Fxml
     private lateinit var fxExpressionSearch: CheckBox
     @Fxml
+    private lateinit var fxExtensionSearch: CheckBox
+    @Fxml
     private lateinit var fxRecursiveSearch: CheckBox
 
     // Regular properties
-    private var directory: String? = null
+    private var path: File? = null
 
     @Fxml
-    fun onBrowse(event: ActionEvent) {
+    fun onBrowse() {
         val window = DirectoryChooser()
-        if (directory != null) {
-            // Start from the current directory
-            window.initialDirectory = File(directory!!)
+
+        path?.let {
+            // Start from the current path
+            window.initialDirectory = it
         }
-        val result = window.showDialog((event.target as Node).scene.window)
-        if (result != null) {
+
+        window.showDialog(fxChoices.scene.window)?.let {
             // Update the path field with the selected directory
-            fxPath.text = result.path
+            fxPath.text = it.path
         }
     }
 
     @Fxml
     fun onOpen() {
-        // Trim the input and ignore empty requests
-        val path = fxPath.text.trim()
-        if (path.isNotEmpty()) {
-            val file = File(path)
-            if (file.isDirectory) {
-                // Set the directory and status when the path is a directory
-                directory = fxPath.text
-                fxStatus.text = Constants.open(fxPath.text)
-            } else {
-                // Alert the user when the path is not a directory
-                InvalidDirectoryAlert(file.path).showAndWait()
+        File(fxPath.text.trim()).also {
+            if (it.path.isNotEmpty()) {
+                if (it.isDirectory) {
+                    // Set the path and status when the path is a directory
+                    path = it
+                    fxStatus.text = Constants.open(it.path)
+                } else {
+                    // Alert the user when the path is not a directory
+                    InvalidDirectoryAlert(it.path).showAndWait()
+                }
             }
         }
     }
@@ -95,20 +93,13 @@ class Main : Initializable {
 
     @Fxml
     fun onDragDrop(event: DragEvent) {
-        var didSet = false
-        val selection = event.dragboard
-        if (selection.hasFiles()) {
-            for (file in selection.files) {
-                if (file.isDirectory) {
-                    // Set the path to the first directory
-                    fxPath.text = file.path
-                    didSet = true
-                    break
-                }
-            }
-            if (!didSet && selection.files.size > 0) {
-                // Infer the path from the first file
-                fxPath.text = selection.files[0].parent
+        event.dragboard.files?.getOrNull(0)?.let {
+            fxPath.text = if (it.isDirectory) {
+                // Set the path to the directory
+                it.path
+            } else {
+                // Infer the path from the file
+                it.parent
             }
         }
     }
@@ -161,7 +152,7 @@ class Main : Initializable {
     private fun onAction(action: () -> Unit) {
         try {
             action()
-        } catch (_: NoDirectoryException) {
+        } catch (_: NullPointerException) {
             NoDirectoryAlert().showAndWait()
         }
     }
@@ -169,20 +160,22 @@ class Main : Initializable {
     private fun onCase(): Reviso {
         return (
             Reviso()
-                .paths(Paths.get(directory!!))
+                .paths(path!!)
                 .case(fxChoices.selectionModel.selectedItem)
                 .isRecursive(fxRecursiveCase.isSelected)
+                .withExtension(fxExtensionCase.isSelected)
         )
     }
 
     private fun onSearch(): Reviso {
         return (
             Reviso()
-                .paths(Paths.get(directory!!))
+                .paths(path!!)
                 .search(fxSearch.text)
                 .replace(fxReplace.text)
                 .isRecursive(fxRecursiveSearch.isSelected)
                 .isExpression(fxExpressionSearch.isSelected)
+                .withExtension(fxExtensionSearch.isSelected)
         )
     }
 }

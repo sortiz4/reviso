@@ -9,11 +9,11 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.versionOption
 import com.github.ajalt.clikt.parameters.types.choice
-import com.github.ajalt.clikt.parameters.types.path
-import java.nio.file.Path
+import com.github.ajalt.clikt.parameters.types.file
+import java.io.File
 
 class Command(private val gui: () -> Unit) : Clikt(name = Constants.name()) {
-    private val paths: Set<Path> by argument().path(canBeFile = false, mustExist = true).multiple().unique()
+    private val paths: Set<File> by argument().file(canBeFile = false, mustExist = true).multiple().unique()
     private val case: String by option(*CASE_NAMES, help = CASE_HELP).choice(*CASE_CHOICES).default("")
     private val search: String by option(*SEARCH_NAMES, help = SEARCH_HELP).default("")
     private val replace: String by option(*REPLACE_NAMES, help = REPLACE_HELP).default("")
