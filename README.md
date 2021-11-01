@@ -18,6 +18,7 @@ In addition to the requirements above, those seeking to compile must have...
 - Java SDK 16
 - Gradle 7.2
 - Python 3.8
+- Rust 1.55
 
 Once these requirements have been met, simply clone the repository and execute
 `gradle build`. A distribution will be created under `./build/distributions/`.
@@ -64,4 +65,4 @@ This section allows you to rename files based on standard methods.
 ### Options
 1. `Recursive` behaves exactly like the same option above.
 
-[1]: https://docs.oracle.com/javase/9/docs/api/java/util/regex/Pattern.html#sum
+[1]: https://docs.oracle.com/javase/12/docs/api/java/util/regex/Pattern.html#sum

@@ -22,7 +22,7 @@ class Reviso {
         // Constructs a formatted preview (pads the first column to enhance readability)
         val changes = collectFileChanges().map { (old, new) -> Pair("${transform(old)}", "${transform(new)}") }
         val padding = changes.maxByOrNull { (old, _) -> old.length }?.first?.length ?: 0
-        return changes.map { (old, new) -> "${old.padEnd(padding)} -> $new" }.toList()
+        return changes.map { (old, new) -> "${old.padEnd(padding)} -> $new" }
     }
 
     fun rename(): Int {
@@ -68,7 +68,7 @@ class Reviso {
         return this
     }
 
-    private fun collectFileChanges(): Sequence<Pair<File, File>> {
+    private fun collectFileChanges(): Collection<Pair<File, File>> {
         val isCase by lazy { case != null }
         val isSearch by lazy { !search.isNullOrEmpty() }
 
@@ -92,9 +92,10 @@ class Reviso {
                         Case.SENTENCE -> source.asCloneBySentenceCase(withExtension)
                         else -> null
                     }
-                    isSearch -> when (isExpression) {
-                        true -> source.asCloneBySearchAndReplace(pattern, replace, withExtension)
-                        false -> source.asCloneBySearchAndReplace(search, replace, withExtension)
+                    isSearch -> if (isExpression) {
+                        source.asCloneBySearchAndReplace(pattern, replace, withExtension)
+                    } else {
+                        source.asCloneBySearchAndReplace(search, replace, withExtension)
                     }
                     else -> null
                 }
@@ -102,27 +103,29 @@ class Reviso {
                 null
             }
 
-            return target?.let {
+            target?.let {
                 if (source.name != target.name) {
                     // Ignore unchanged file names
                     return Pair(source, target)
                 }
-                return null
             }
+
+            return null
         }
 
         return collectFiles().mapNotNull { transform(it) }
     }
 
-    private fun collectFiles(): Sequence<File> {
-        return paths.map { collectFiles(it.toAbsoluteFile()) }.fold(emptySequence()) { seq, tree -> seq + tree }
-    }
-
-    private fun collectFiles(file: File): Sequence<File> {
-        val files = when (isRecursive) {
-            true -> file.walkBottomUp()
-            false -> file.walkBottomUp().maxDepth(1)
+    private fun collectFiles(): Collection<File> {
+        fun transform(file: File): Collection<File> {
+            val files = if (!isRecursive) {
+                file.walkBottomUp().maxDepth(1)
+            } else {
+                file.walkBottomUp()
+            }
+            return files.toList().dropLast(1)
         }
-        return files.toList().dropLast(1).asSequence()
+
+        return paths.map { transform(it.toAbsoluteFile()) }.fold(emptyList()) { sum, item -> sum + item }
     }
 }
