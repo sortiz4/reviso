@@ -8,9 +8,9 @@ import kotlin.system.exitProcess
 class Main : Application() {
     override fun start(stage: Stage) {
         // Load the scene and set the title
-        stage.icons.addAll(Constants.icons())
-        stage.scene = Scene(Constants.scene())
-        stage.title = Constants.TITLE
+        stage.icons.addAll(Resources.icons())
+        stage.scene = Scene(Resources.scene())
+        stage.title = Resources.TITLE
         stage.show()
 
         // Set the window constraints

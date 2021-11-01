@@ -15,10 +15,9 @@ import javafx.scene.input.KeyEvent
 import javafx.scene.input.TransferMode
 import javafx.stage.DirectoryChooser
 import reviso.Case
-import reviso.Constants
 import reviso.Reviso
-import reviso.scene.alerts.InvalidDirectoryAlert
-import reviso.scene.alerts.NoDirectoryAlert
+import reviso.scene.alerts.InvalidPathAlert
+import reviso.scene.alerts.NullPathAlert
 import reviso.scene.alerts.PreviewAlert
 import reviso.scene.alerts.ResultAlert
 
@@ -61,7 +60,7 @@ class Main : Initializable {
             window.initialDirectory = it
         }
 
-        window.showDialog(fxChoices.scene.window)?.let {
+        window.showDialog(fxPath.scene.window)?.let {
             // Update the path field with the selected directory
             fxPath.text = it.path
         }
@@ -74,10 +73,10 @@ class Main : Initializable {
                 if (it.isDirectory) {
                     // Set the path and status when the path is a directory
                     path = it
-                    fxStatus.text = Constants.open(it.path)
+                    fxStatus.text = "Open: ${it.path}"
                 } else {
                     // Alert the user when the path is not a directory
-                    InvalidDirectoryAlert(it.path).showAndWait()
+                    InvalidPathAlert(it.path).showAndWait()
                 }
             }
         }
@@ -153,7 +152,7 @@ class Main : Initializable {
         try {
             action()
         } catch (_: NullPointerException) {
-            NoDirectoryAlert().showAndWait()
+            NullPathAlert().showAndWait()
         }
     }
 

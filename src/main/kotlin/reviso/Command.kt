@@ -12,7 +12,7 @@ import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.file
 import java.io.File
 
-class Command(private val gui: () -> Unit) : Clikt(name = Constants.name()) {
+class Command(private val gui: () -> Unit) : Clikt(name = Resources.TITLE.toLowerCase()) {
     private val paths: Set<File> by argument().file(canBeFile = false, mustExist = true).multiple().unique()
     private val case: String by option(*CASE_NAMES, help = CASE_HELP).choice(*CASE_CHOICES).default("")
     private val search: String by option(*SEARCH_NAMES, help = SEARCH_HELP).default("")
@@ -24,28 +24,25 @@ class Command(private val gui: () -> Unit) : Clikt(name = Constants.name()) {
     private val preview: Boolean by option(*PREVIEW_NAMES, help = PREVIEW_HELP).flag(default = false)
 
     init {
-        versionOption(Constants.VERSION, names = VERSION_NAMES.toSet())
+        versionOption(Resources.VERSION, names = VERSION_NAMES.toSet())
     }
 
     override fun run() {
-        when (launch) {
-            true -> {
-                gui()
-            }
-            false -> {
-                val reviso = (
-                    Reviso()
-                        .paths(paths)
-                        .case(case)
-                        .search(search)
-                        .replace(replace)
-                        .isRecursive(recursive)
-                        .isExpression(expression)
-                        .withExtension(extension)
-                )
-                if (preview) {
-                    reviso.preview(relative = true).forEach { echo(it) }
-                }
+        if (launch) {
+            gui()
+        } else {
+            val reviso = (
+                Reviso()
+                    .paths(paths)
+                    .case(case)
+                    .search(search)
+                    .replace(replace)
+                    .isRecursive(recursive)
+                    .isExpression(expression)
+                    .withExtension(extension)
+            )
+            if (preview) {
+                reviso.preview(relative = true).forEach { echo(it) }
             }
         }
     }
@@ -63,7 +60,7 @@ class Command(private val gui: () -> Unit) : Clikt(name = Constants.name()) {
         private val VERSION_NAMES = arrayOf("--version", "-v")
 
         // Help messages
-        private const val CASE_HELP = "The common case to apply. Disables search and replace."
+        private const val CASE_HELP = "The common case to use. Disables search and replace."
         private const val SEARCH_HELP = "Text to search for. Disables case selection."
         private const val REPLACE_HELP = "Text to replace the search text with. Disables case selection."
         private const val RECURSIVE_HELP = "Descend into directories."
@@ -72,7 +69,7 @@ class Command(private val gui: () -> Unit) : Clikt(name = Constants.name()) {
         private const val LAUNCH_HELP = "Launch the graphical user interface."
         private const val PREVIEW_HELP = "Preview the changes."
 
-        // Extra options
+        // Other options
         private val CASE_CHOICES = Case.cliNames()
     }
 }
