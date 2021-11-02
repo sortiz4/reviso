@@ -43,6 +43,8 @@ class Command(private val gui: () -> Unit) : Clikt(name = Resources.name()) {
             )
             if (preview) {
                 reviso.preview(relative = true).forEach { echo(it) }
+            } else {
+                reviso.rename()
             }
         }
     }
