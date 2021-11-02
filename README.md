@@ -52,9 +52,9 @@ This section allows you to rename files based on common cases.
 2. `Upper Case` capitalizes every character.
 3. `Lower Space Case` separates words with a space and decapitalizes every character.
 4. `Upper Space Case` separates words with a space and capitalizes every character.
-5. `Dot Case` separates words with a dot.
-6. `Kebab Case` separates words with a hyphen.
-7. `Snake Case` separates words with an underscore.
+5. `Dot Case` decapitalizes every character and separates words with a dot.
+6. `Kebab Case` decapitalizes every character and separates words with a hyphen.
+7. `Snake Case` decapitalizes every character and separates words with an underscore.
 8. `Camel Case` removes separators and capitalizes each word (excluding the first).
 9. `Pascal Case` removes separators and capitalizes each word (including the first).
 10. `Title Case` separates and capitalizes words.
