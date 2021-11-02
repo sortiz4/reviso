@@ -82,6 +82,8 @@ class Reviso {
                     isCase -> when (case) {
                         Case.LOWER -> source.asCloneByLowerCase(withExtension)
                         Case.UPPER -> source.asCloneByUpperCase(withExtension)
+                        Case.LOWER_SPACE -> source.asCloneByLowerSpaceCase(withExtension)
+                        Case.UPPER_SPACE -> source.asCloneByUpperSpaceCase(withExtension)
                         Case.DOT -> source.asCloneByDotCase(withExtension)
                         Case.KEBAB -> source.asCloneByKebabCase(withExtension)
                         Case.SNAKE -> source.asCloneBySnakeCase(withExtension)

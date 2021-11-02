@@ -9,6 +9,14 @@ enum class Case(private val cliName: String, private val guiName: String) {
         "upper",
         "Upper Case",
     ),
+    LOWER_SPACE(
+        "lower-space",
+        "Lower Space Case",
+    ),
+    UPPER_SPACE(
+        "upper-space",
+        "Upper Space Case",
+    ),
     DOT(
         "dot",
         "Dot Case",

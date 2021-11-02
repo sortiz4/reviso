@@ -7,9 +7,11 @@ import net.pearx.kasechange.splitToWords
 import net.pearx.kasechange.toCamelCase
 import net.pearx.kasechange.toDotCase
 import net.pearx.kasechange.toKebabCase
+import net.pearx.kasechange.toLowerSpaceCase
 import net.pearx.kasechange.toPascalCase
 import net.pearx.kasechange.toSnakeCase
 import net.pearx.kasechange.toTitleCase
+import net.pearx.kasechange.toUpperSpaceCase
 
 private val AP_WORDS = hashSetOf(
     "a",
@@ -49,6 +51,14 @@ fun File.asCloneByLowerCase(withExtension: Boolean): File {
 
 fun File.asCloneByUpperCase(withExtension: Boolean): File {
     return asClone(withExtension) { it.toUpperCase() }
+}
+
+fun File.asCloneByLowerSpaceCase(withExtension: Boolean): File {
+    return asClone(withExtension) { it.toLowerSpaceCase() }
+}
+
+fun File.asCloneByUpperSpaceCase(withExtension: Boolean): File {
+    return asClone(withExtension) { it.toUpperSpaceCase() }
 }
 
 fun File.asCloneByDotCase(withExtension: Boolean): File {
