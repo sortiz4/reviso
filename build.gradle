@@ -6,11 +6,14 @@ plugins {
 
 ext {
     appTitle = "reviso"
+    appTarget = "12"
     appVersion = "2.1.0"
 }
 
-group = appTitle
-version = appVersion
+allprojects {
+    group = appTitle
+    version = appVersion
+}
 
 repositories {
     mavenCentral()
@@ -51,7 +54,7 @@ build {
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = "12"
+        jvmTarget = "${appTarget}"
     }
 }
 
@@ -63,7 +66,7 @@ jar {
 }
 
 java {
-    targetCompatibility = JavaVersion.VERSION_12
+    targetCompatibility = "${appTarget}"
 }
 
 javafx {
