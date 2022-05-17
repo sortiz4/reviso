@@ -1,5 +1,5 @@
 # Reviso
-Reviso is a powerful command-line tool and desktop application that can rename
+Reviso is a powerful command line tool and desktop application that can rename
 large collections of files at the press of a button. Users can search for and
 replace simple or complex patterns with regular expressions, or choose from a
 wide variety of commonly used cases to rename their files.
