@@ -17,7 +17,7 @@ WRAPPER_SETUP_TASK = ['rustc', WRAPPER_SRC_PATH, '--out-dir', WRAPPER_DEST_PATH,
 
 class Command:
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Construct the argument parser
         options = {
             'description': 'Prepares the workspace.',
@@ -53,9 +53,9 @@ class Command:
         # Parse the arguments from the system
         self.args = parser.parse_args()
 
-    def handle(self):
-        def icons():
-            def get_icon_name(icon_size):
+    def handle(self) -> None:
+        def icons() -> None:
+            def get_icon_name(icon_size: int) -> str:
                 return '{}.png'.format(icon_size)
 
             # Stop if one of the icons exist
@@ -76,7 +76,7 @@ class Command:
                 with open(os.path.join(ICONS_DEST_PATH, name), 'wb') as icon:
                     icon.write(content)
 
-        def wrapper():
+        def wrapper() -> None:
             # Compile the wrapper
             run(WRAPPER_SETUP_TASK)
 
