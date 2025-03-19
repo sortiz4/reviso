@@ -63,14 +63,14 @@ class Command : Clikt(name = Resources.name()) {
         private val VERSION_NAMES = arrayOf("--version", "-v")
 
         // Help messages
-        private const val CASE_HELP = "The common case to use. Disables search and replace."
-        private const val SEARCH_HELP = "Text to search for. Disables case selection."
-        private const val REPLACE_HELP = "Text to replace the search text with. Disables case selection."
-        private const val RECURSIVE_HELP = "Descend into directories."
-        private const val EXPRESSION_HELP = "Interpret the search and replace text as a regular expression."
-        private const val EXTENSION_HELP = "Include the file extension."
-        private const val LAUNCH_HELP = "Launch the graphical user interface."
-        private const val PREVIEW_HELP = "Preview the changes."
+        private const val CASE_HELP = "The common case to use (disables search and replace)"
+        private const val SEARCH_HELP = "Text to search for (disables case selection)"
+        private const val REPLACE_HELP = "Text to replace the search text with (disables case selection)"
+        private const val RECURSIVE_HELP = "Descend into directories"
+        private const val EXPRESSION_HELP = "Interpret the search and replace text as a regular expression"
+        private const val EXTENSION_HELP = "Include the file extension"
+        private const val LAUNCH_HELP = "Launch the graphical user interface"
+        private const val PREVIEW_HELP = "Preview the changes"
 
         // Extra options
         private val CASE_CHOICES = Case.cliNames()
