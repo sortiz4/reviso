@@ -42,7 +42,7 @@ Once a directory has been opened...
 2. Changes can be applied with the `Rename` button. This action cannot be undone.
 
 ## Common cases
-This section allows you to rename files based on common cases.
+This section covers the ability to rename files based on common cases.
 
 ### Cases
 1. `Lower Case` decapitalizes every character.
@@ -63,9 +63,9 @@ This section allows you to rename files based on common cases.
 2. `Recursive` will rename all files under the active directory.
 
 ## Search and replace
-This section allows you to search for and replace arbitrary patterns. All
-occurrences of the search text will be replaced by the replacement text. The
-replacement text may be omitted to remove the search text from the name.
+This section covers the ability to search for and replace arbitrary patterns.
+All occurrences of the search text will be replaced by the replacement text.
+The replacement text may be omitted to remove the search text from the name.
 
 ### Options
 1. `Regular expression` will treat the search and replacement text as
