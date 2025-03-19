@@ -93,6 +93,7 @@ fun File.asCloneByTitleApCase(withExtension: Boolean): File {
             if (i == 0 || i == words.size - 1 || word !in AP_WORDS) {
                 return word.toTitleCase()
             }
+
             return word
         }
 

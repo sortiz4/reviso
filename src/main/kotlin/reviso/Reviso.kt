@@ -16,6 +16,7 @@ class Reviso {
             if (!relative) {
                 return file
             }
+
             return file.toRelativeFile()
         }
 
@@ -125,6 +126,7 @@ class Reviso {
             } else {
                 file.walkBottomUp()
             }
+
             return files.toList().dropLast(1)
         }
 

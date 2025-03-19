@@ -41,6 +41,7 @@ class Command : Clikt(name = Resources.name()) {
                     .isExpression(expression)
                     .withExtension(extension)
             )
+
             if (preview) {
                 reviso.preview(relative = true).forEach { echo(it) }
             } else {

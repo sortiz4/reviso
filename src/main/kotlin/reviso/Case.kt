@@ -52,15 +52,15 @@ enum class Case(private val cliName: String, private val guiName: String) {
 
     companion object {
         fun cliNames(): Array<String> {
-            return values().map { it.cliName }.toTypedArray()
+            return entries.map { it.cliName }.toTypedArray()
         }
 
         fun guiNames(): Array<String> {
-            return values().map { it.guiName }.toTypedArray()
+            return entries.map { it.guiName }.toTypedArray()
         }
 
         fun from(value: String): Case? {
-            return values().find { it.cliName == value || it.guiName == value }
+            return entries.find { it.cliName == value || it.guiName == value }
         }
     }
 }

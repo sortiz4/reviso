@@ -27,6 +27,7 @@ object Resources {
             "reviso/icon/128.png",
             "reviso/icon/256.png",
         )
+
         return icons.map { Image(resource(it)?.openStream(), 0.0, 0.0, true, true) }.toTypedArray()
     }
 

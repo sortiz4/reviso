@@ -10,15 +10,15 @@ for many years.
 
 ## Requirements
 - Linux, MacOS, or Windows
-- Java 12
+- Java 21
 
 ## Compilation
 In addition to the requirements above, those seeking to compile must have...
 
-- Java SDK 16
-- Gradle 7.2
-- Python 3.8
-- Rust 1.55
+- Java SDK 23
+- Gradle 8.13
+- Python 3.13
+- Rust 1.85
 
 Once these requirements have been met, simply clone the repository and execute
 `gradle build`. A distribution will be created under `./build/distributions/`.
@@ -76,4 +76,4 @@ replacement text may be omitted to remove the search text from the name.
 2. `Include extension` is identical to the same option above.
 3. `Recursive` is identical to the same option above.
 
-[1]: https://docs.oracle.com/en/java/javase/12/docs/api/java.base/java/util/regex/Pattern.html#sum
+[1]: https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/regex/Pattern.html#sum
