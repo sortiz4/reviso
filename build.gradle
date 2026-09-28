@@ -39,7 +39,7 @@ tasks.register('setup') {
     doLast {
         exec {
             executable getPython()
-            args "setup.py", "--icons", "--wrapper"
+            args "setup.py", "--wrapper"
         }
     }
 }
