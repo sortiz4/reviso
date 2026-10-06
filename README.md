@@ -7,15 +7,14 @@ expressions, or choose from a variety of commonly used case conventions.
 
 ## Requirements
 - Linux, MacOS, or Windows
-- Java 21
+- Java 25
 
 ## Compilation
 In addition to the requirements above, those seeking to compile must have...
 
-- Java SDK 23
-- Gradle 8.13
-- Python 3.13
-- Rust 1.85
+- Java SDK 27
+- Gradle 9.8.0
+- Rust 1.99.0
 
 Once these requirements have been met, simply clone the repository and execute
 `gradle build`. A distribution will be created under `./build/distributions/`.

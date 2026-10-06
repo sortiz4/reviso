@@ -95,11 +95,13 @@ class Reviso {
                         Case.SENTENCE -> source.asCloneBySentenceCase(withExtension)
                         else -> null
                     }
+
                     isSearch -> if (isExpression) {
                         source.asCloneBySearchAndReplace(pattern, replace, withExtension)
                     } else {
                         source.asCloneBySearchAndReplace(search, replace, withExtension)
                     }
+
                     else -> null
                 }
             } catch (_: IllegalArgumentException) {

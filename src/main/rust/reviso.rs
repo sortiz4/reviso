@@ -23,11 +23,13 @@ fn main() {
 
     // Construct the arguments
     let default_arguments = &[
+        "--enable-native-access", "ALL-UNNAMED,javafx.graphics",
         "--module-path", module_path.to_str().unwrap(),
         "--add-modules", "javafx.controls,javafx.fxml",
         "-classpath", &class_path,
         "reviso.Main",
     ];
+
     let merged_arguments = {
         default_arguments
             .iter()
